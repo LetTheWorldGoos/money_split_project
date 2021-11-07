@@ -8,6 +8,7 @@ import {
   } from "react-router-dom";
 import User from "../User";
 import Group from "../Group";
+import Search from "../Search"
 
 export default class App extends Component{
     constructor(props){
@@ -21,6 +22,7 @@ export default class App extends Component{
           <Switch>
             <Route exact path="/group/:id"  children={<Group />}/>
             <Route exact path="/user/:id" children={<User />}/>
+            <Route exact path="/search" children={<Search />}/>
           </Switch>
         </Router>
         </div>
