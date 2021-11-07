@@ -17,17 +17,22 @@ export default function Search(){
         getRes(key?key:query).then((groups)=>{
             setRes({res:groups,loaded:true});
         })
-    },[])
+    },[key,query])
     let handleChange=(event)=>{
         setkey(event.target.value);
+    }
+    let handleSubmit=()=>{
+        console.log(key)
         getRes(key?key:query).then((groups)=>{
             setRes({res:groups,loaded:true});
-        })
+        },[])
     }
     return(
         <div className="Search">
             <h1>Search Group</h1>
-            <input type="text" placeholder="Group Name" onChange={handleChange}/>
+                <label>Search Group: </label>
+                <input type="text" placeholder="Group Name" onChange={handleChange}/>
+                <button onClick={handleSubmit}>Search</button>
             <div className="Results">
                 {loaded?displayGrps(res):"loading..."}
             </div>
@@ -36,7 +41,7 @@ export default function Search(){
 }
 
 async function getRes(key){
-    let grps=await axios.get("http://localhost:8888/user/search?group_name=sample"+String(key));
+    let grps=await axios.get("http://localhost:8888/user/search?group_name="+String(key));
     console.log(grps);
     let groups = [];
     for(var i in grps.data.data){

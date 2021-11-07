@@ -17,7 +17,7 @@ export default function User(){
         getStates(id).then(result => {
             setStates({UserName:result[0],activities:result[1],groups:result[2],loans:result[3],loaded:true});
         })
-    },[]);
+    },[id]);
     let handleChange=(event)=>{
         console.log(event.target.value);
         setkey(event.target.value);
@@ -60,11 +60,11 @@ async function getStates(id){
     for(var i in lons.data.data){
         loans.push(lons.data.data[i]);
     }
-    for(var i in grps.data.data){
-        groups.push(grps.data.data[i]);
+    for(var j in grps.data.data){
+        groups.push(grps.data.data[j]);
     }
-    for(var i in acts.data.data){
-        activities.push(acts.data.data[i]);
+    for(var k in acts.data.data){
+        activities.push(acts.data.data[k]);
     }
     return [UserName,activities,groups,loans];
 }
