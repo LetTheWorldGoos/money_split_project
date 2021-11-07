@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -8,10 +8,21 @@ import {
   } from "react-router-dom";
 import axios from 'axios';
 
-export default async function User(){
+export default function User(){
     let {id} = useParams();
-    const name = await axios.get("https://pokeapi.co/api/v2/pokemon/"+{id});
+    let [UserName,setName] = useState();
+    useEffect(()=>{
+        getName(id).then(name => {
+            setName(name);
+            console.log(name);
+        });
+    });
     return(
-        <div>this is the user page for {id} {name}</div>
+        <div>this is the user page for {UserName}</div>
     );
+}
+
+async function getName(id){
+    let {data}=await axios.get("https://pokeapi.co/api/v2/pokemon/"+String(id));
+    return data.name;
 }
