@@ -5,7 +5,7 @@ import datetime
 
 
 # calculate for question 1.4
-def check_bill(debit, credit):
+def check_bill(debit, credit,title):
     # efficiency first!
     debit = dict(debit)
     credit = dict(credit)
@@ -15,17 +15,17 @@ def check_bill(debit, credit):
         if key in debit.keys():
             if key in credit.keys():
                  opt.append({
-                     "UserName":key,
+                     title:key,
                      "Amount":debit[key] - credit[key]
                  })
             else:
                 opt.append({
-                    "UserName": key,
+                    title: key,
                     "Amount": debit[key]
                 })
         elif key in credit.keys():
             opt.append({
-                "UserName": key,
+                title: key,
                 "Amount": -credit[key],
                 "type":"credit"
             })
