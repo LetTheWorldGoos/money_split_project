@@ -9,7 +9,10 @@ app = Flask(__name__)
 # mysql
 init_conn = mysql_conn()
 db_conn = init_conn.start_conn()
-
+# Cross origin
+flask_cors.CORS(app, supports_credentials=True)
+# json specify
+app.config['JSON_AS_ASCII'] = False
 
 # 0.0 Userinfo
 @app.route('/get_info', methods=['GET'])
