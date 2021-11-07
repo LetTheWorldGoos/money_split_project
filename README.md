@@ -20,7 +20,7 @@ including front end with React, back end with Flask.
     nohup python [project_path]/interfaces.py
     ```
 
-#### How to keep pace with the environment for successful setup
+### How to keep pace with the environment for successful setup
 
 - Manual:	see packages in ./backend/requirements.txt
 
