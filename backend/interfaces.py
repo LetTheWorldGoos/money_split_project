@@ -10,7 +10,7 @@ app = Flask(__name__)
 init_conn = mysql_conn()
 db_conn = init_conn.start_conn()
 # Cross origin
-flask_cors.CORS(app, supports_credentials=True)
+flask_cors.CORS(app)
 # json specify
 app.config['JSON_AS_ASCII'] = False
 
