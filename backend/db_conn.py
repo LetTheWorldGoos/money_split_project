@@ -1,3 +1,5 @@
+# pymysql with ver 0.10.0
+# testing warning: when pymysql using 1.x ver, error occurred
 import pymysql
 
 
@@ -21,6 +23,7 @@ class mysql_conn:
         :param sql:  sql query
         :return: data(separated by column names and data)
         """
+        conn.ping(reconnect=True)
         with conn.cursor() as cur:
             cur.execute(sql)
             # fetch title and data
@@ -32,6 +35,7 @@ class mysql_conn:
         """
         update/insert/delete function
         """
+        conn.ping(reconnect=True)
         with conn.cursor() as cur:
             cur.execute(sql)
             conn.commit()
