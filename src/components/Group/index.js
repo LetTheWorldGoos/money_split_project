@@ -7,16 +7,17 @@ import {
   useParams,
 } from "react-router-dom";
 import axios from "axios";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import Balance from "./Balance";
 import Member from "./Member";
 import History from "./History";
 
 function Group() {
+  const { state } = useLocation();
+  const uid = state ? state.uid : 1;
   const history = useHistory();
   const { id } = useParams();
   const BASE_URI = "http://127.0.0.1:8888";
-  const uid = 59;
   const [records, setRecords] = useState([]);
   const [loans, setLoans] = useState([]);
   const [members, setMembers] = useState([]);
@@ -55,7 +56,7 @@ function Group() {
   return (
     <div style={{ marginLeft: "50px", marginRight: "50px" }}>
       <h1>Group ID {id}</h1>
-      <h1>Current User ID {uid}</h1>
+      <h1>Current User ID {uid || 1}</h1>
       <div style={{ marginLeft: "90%" }}>
         <button style={{ marginRight: "5px" }} onClick={handleSettle}>
           Settle
