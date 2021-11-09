@@ -189,8 +189,8 @@ def get_user_delete():
                 return jsonify({"code": 200,
                                 "status": "success"})
             else:
-                return jsonify({"code": 500,
-                                "message": f"delete failed."})
+                return jsonify({"code": 200,
+                                "message": "delete failed."})
         else:
             return jsonify({"code": 200,
                             "status": "remain unpaid transaction"})
