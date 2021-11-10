@@ -182,7 +182,8 @@ def get_user_delete():
                         WHERE t.BorrowId = {user_id} AND b.GroupId = {group_id} AND t.PaidStatus = "Process"\
                         GROUP BY t.BorrowId;'
         cols, count = init_conn.ddl_db(db_conn, count_process)
-        if count == 0:
+        print(cols,count)
+        if len(count) == 0:
             delete_process = f'DELETE FROM GroupJoin WHERE UserId = {user_id} AND GroupId = {group_id}'
             rsl = init_conn.ddl_db_uid(db_conn, delete_process)
             if rsl:
