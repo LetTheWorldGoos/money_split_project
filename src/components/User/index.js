@@ -39,11 +39,35 @@ export default function User() {
                 >
             <li>Group Name: {group.GroupName}</li>
             </Link>
-            <button userid={id} groupid={group.GroupId} onClick={UserLeave}>Leave the Group</button>
+            <button userid={id} groupid={group.GroupId} ind={index} onClick={UserLeave}>Leave the Group</button>
           </div>
       );
     });
   }
+
+  async function UserLeave(event){
+    console.log(event.target.attributes.userid.value)
+    console.log(event.target.attributes.groupid.value)
+    let userid = event.target.attributes.userid.value
+    let groupid = event.target.attributes.groupid.value
+    let body = {
+      group_id: groupid,
+      user_id:userid
+    }
+    let res = await axios.post("http://localhost:8888/user/delete",body)
+    console.log(res)
+    alert(res.data.status)
+    let index = Number(event.target.attributes.ind.value)
+    let GroupsBefore = groups
+    GroupsBefore.splice(index,1)
+    setStates({
+      UserName: UserName,
+      activities: activities,
+      groups: GroupsBefore,
+      loans: loans,
+      loaded: true,
+    });
+}
 
   let handleChange = (event) => {
     console.log(event.target.value);
@@ -77,20 +101,6 @@ export default function User() {
       </div>
     </div>
   );
-}
-
-async function UserLeave(event){
-    console.log(event.target.attributes.userid.value)
-    console.log(event.target.attributes.groupid.value)
-    let userid = event.target.attributes.userid.value
-    let groupid = event.target.attributes.groupid.value
-    let body = {
-      group_id: groupid,
-      user_id:userid
-    }
-    let res = await axios.post("http://localhost:8888/user/delete",body)
-    console.log(res)
-    alert(res.data.status)
 }
 
 async function getStates(id) {
