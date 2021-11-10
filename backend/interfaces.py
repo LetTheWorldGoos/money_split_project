@@ -32,10 +32,10 @@ def get_info():
             return jsonify(ans)
         else:
             return jsonify({"code": 500,
-                            "message": f"cannot find use id {user}"})
+                            "status": f"cannot find use id {user}"})
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 1.1 Add new Transaction(add trigger needed)
@@ -55,10 +55,10 @@ def group_add_transaction():
             })
         else:
             return jsonify({"code": 500,
-                            "message": f"insert failed."})
+                            "status": f"insert failed."})
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 1.2 Settle Transaction
@@ -76,10 +76,10 @@ def group_settle():
             })
         else:
             return jsonify({"code": 500,
-                            "message": f"insert failed."})
+                            "status": f"insert failed."})
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 1.3
@@ -100,7 +100,7 @@ def group_get_records():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 1.4
@@ -131,7 +131,7 @@ def group_get_loans():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 1.5
@@ -151,7 +151,7 @@ def group_get_members():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 2.1
@@ -170,7 +170,7 @@ def get_user_search():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 # 2.2
 @app.route('/user/delete', methods=['POST'])
@@ -189,14 +189,14 @@ def get_user_delete():
                 return jsonify({"code": 200,
                                 "status": "success"})
             else:
-                return jsonify({"code": 200,
-                                "message": "delete failed."})
+                return jsonify({"code": 500,
+                                "status": "delete failed."})
         else:
-            return jsonify({"code": 200,
+            return jsonify({"code": 500,
                             "status": "remain unpaid transaction"})
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 # 2.3
 @app.route('/user/select_group', methods=['GET'])
@@ -214,7 +214,7 @@ def get_user_select_group():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 # 2.4
@@ -241,7 +241,7 @@ def get_user_ra():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 # 2.5
 @app.route('/user/status_category',methods=['GET'])
@@ -267,7 +267,7 @@ def user_status_category():
         return jsonify(ans)
     else:
         return jsonify({"code": 500,
-                        "message": f"method{request.method} not supported"})
+                        "status": f"method{request.method} not supported"})
 
 
 if __name__ == '__main__':
