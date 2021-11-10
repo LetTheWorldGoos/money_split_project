@@ -57,16 +57,18 @@ export default function User() {
     let res = await axios.post("http://localhost:8888/user/delete",body)
     console.log(res)
     alert(res.data.status)
-    let index = Number(event.target.attributes.ind.value)
-    let GroupsBefore = groups
-    GroupsBefore.splice(index,1)
-    setStates({
-      UserName: UserName,
-      activities: activities,
-      groups: GroupsBefore,
-      loans: loans,
-      loaded: true,
-    });
+    if(res.data.status === "success"){
+      let index = Number(event.target.attributes.ind.value)
+      let GroupsBefore = groups
+      GroupsBefore.splice(index,1)
+      setStates({
+        UserName: UserName,
+        activities: activities,
+        groups: GroupsBefore,
+        loans: loans,
+        loaded: true,
+      });
+    }
 }
 
   let handleChange = (event) => {
