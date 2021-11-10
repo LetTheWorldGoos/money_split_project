@@ -29,17 +29,18 @@ export default function User() {
     });
   }, [id]);
 
-  function displayGrps(data) {
+  function displayGrps(data,id) {
     return data.map((group, index) => {
       return (
-        <Link
-          key={group.GroupId}
-          to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
-        >
           <div key={index} className="Group">
+            <Link
+                key={group.GroupId}
+                to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
+                >
             <li>Group Name: {group.GroupName}</li>
+            </Link>
+            <button userid={id} groupid={group.GroupId} onClick={UserLeave}>Leave the Group</button>
           </div>
-        </Link>
       );
     });
   }
@@ -71,11 +72,25 @@ export default function User() {
         </div>
         <div className="Groups column">
           <h3 className="Title">Groups</h3>
-          {loaded ? displayGrps(groups) : "loading..."}
+          {loaded ? displayGrps(groups,id) : "loading..."}
         </div>
       </div>
     </div>
   );
+}
+
+async function UserLeave(event){
+    console.log(event.target.attributes.userid.value)
+    console.log(event.target.attributes.groupid.value)
+    let userid = event.target.attributes.userid.value
+    let groupid = event.target.attributes.groupid.value
+    let body = {
+      group_id: groupid,
+      user_id:userid
+    }
+    let res = await axios.post("http://localhost:8888/user/delete",body)
+    console.log(res)
+    alert(res.data.status)
 }
 
 async function getStates(id) {
