@@ -30,6 +30,7 @@ class mysql_conn:
             columns = [i[0] for i in cur.description]
             result = cur.fetchall()
             return columns, result
+
     @staticmethod
     def ddl_db_uid(conn, sql):
         """
@@ -40,9 +41,6 @@ class mysql_conn:
             cur.execute(sql)
             conn.commit()
             return True
-
-    # def __del__(self, conn):
-    #     conn.close()
 
 # if __name__ == '__main__':
 #     o = mysql_conn()

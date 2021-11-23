@@ -1,8 +1,13 @@
-from flask import Flask, request, jsonify  # make_response, send_from_directory
+import functools
+from flask import Flask, request, jsonify, session  # make_response, send_from_directory
 import flask_cors
-import json
+
+# import json
 from db_conn import mysql_conn
 from utils import *
+from datetime import timedelta
+from datetime import datetime
+from user import User
 
 # flask
 app = Flask(__name__)
@@ -13,9 +18,107 @@ db_conn = init_conn.start_conn()
 flask_cors.CORS(app, supports_credentials=False)
 # json specify
 app.config['JSON_AS_ASCII'] = False
+# session key
+app.secret_key = 'splitmunity'
+app.permanent_session_lifetime = timedelta(hours=1)
 
-# 0.0 Userinfo
+
+# decorator: @login_required
+def login_required(func):
+    # 修饰内层函数，防止当前装饰器去修改被装饰函数的属性
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        # 从session获取用户信息，如果有，则用户已登录，否则没有登录
+        username = session.get('username')
+        if not username:
+            # 这里返回error信息 还是redirect？
+            return jsonify({
+                "code": 500,
+                "status": "user not login"})
+            # return redirect(url_for('login'))
+        else:
+            return func(*args, **kwargs)
+
+    return inner
+
+
+"""
+part 0: login control
+"""
+
+
+# 0.0 register
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        # username & email are unique
+        username = request.json['username']
+        email = request.json['email']
+        password = request.json['password']
+        if not username or not password or not email:
+            return jsonify({"code": 500, "status": "invalid input"})
+        user_rg = User()
+
+        if user_rg.check_user(username, 'Username') or user_rg.check_user(email, 'Email'):
+            return jsonify({"code": 500, "status": "user already exist."})
+
+        else:
+            user_rg.register(username=username, password=password, email=email)
+            return jsonify({"code": 200})
+    else:
+        return jsonify({
+            "code": 500,
+            "status": f"method{request.method} not supported"})
+
+
+# 0.1 login
+@app.route('/login', methods=['POST'])
+def login():
+    # session.permanent = True
+    if request.method == 'POST':
+        username = request.json['username']
+        password = request.json['password']
+        if not username or not password:
+            # flash('Invalid input.')
+            return jsonify({"code": 500,
+                            "status": "invalid input"})
+        user_login = User()
+        user_login.login(username)
+        if user_login.validate_password(password):
+            session['username'] = username
+            # print(session)
+            return jsonify(
+                {"code": 200,
+
+                 # "login": 1,
+                 "username": user_login.username})
+        else:
+            return jsonify({"code": 500,
+                            # "login": 1,
+                            "status": "username or password not valid"})
+    # return  render_template('[absolute_path]\login.html')
+    else:
+        return jsonify({
+            "code": 500,
+            "status": f"method{request.method} not supported"})
+
+
+# 0.2 logout
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    # remove the username from the session if it's there
+    if session.get('username'):
+        session.clear()
+        return jsonify({"code": 200
+                        })
+    else:
+        return jsonify({"code": 500,
+                        "status": "user not login"})
+
+
+# 0.3 get userinfo
 @app.route('/get_info', methods=['GET'])
+@login_required
 def get_info():
     if request.method == 'GET':
         user = request.args.get('user_id', '')
@@ -27,7 +130,7 @@ def get_info():
         if len(list_rsl) >= 1:
             ans = {
                 "code": 200,
-                "data":list_rsl[0]
+                "data": list_rsl[0]
             }
             return jsonify(ans)
         else:
@@ -38,8 +141,14 @@ def get_info():
                         "status": f"method{request.method} not supported"})
 
 
+"""
+part 1: group function
+"""
+
+
 # 1.1 Add new Transaction(add trigger needed)
 @app.route('/group/add_transaction', methods=['POST'])
+@login_required
 def group_add_transaction():
     if request.method == 'POST':
         user_id, group_id, lend_id, amount, category, description = request.json['user_id'], request.json['group_id'], \
@@ -63,6 +172,7 @@ def group_add_transaction():
 
 # 1.2 Settle Transaction
 @app.route('/group/settle_transaction', methods=['POST'])
+@login_required
 def group_settle():
     if request.method == 'POST':
         user_id, group_id, borrow_id = request.json['user_id'], request.json['group_id'], request.json['borrow_id']
@@ -84,6 +194,7 @@ def group_settle():
 
 # 1.3
 @app.route('/group/records', methods=['GET'])
+@login_required
 def group_get_records():
     if request.method == 'GET':
         content = request.args.get('group_id', '')
@@ -106,6 +217,7 @@ def group_get_records():
 # 1.4
 # here 0 is not set in the result
 @app.route('/group/loans', methods=['GET'])
+@login_required
 def group_get_loans():
     if request.method == 'GET':
         group_id = request.args.get('group_id', '')
@@ -136,6 +248,7 @@ def group_get_loans():
 
 # 1.5
 @app.route('/group/members', methods=['GET'])
+@login_required
 def group_get_members():
     if request.method == 'GET':
         group_id = request.args.get('group_id', '')
@@ -154,8 +267,14 @@ def group_get_members():
                         "status": f"method{request.method} not supported"})
 
 
+"""
+part 2: user function
+"""
+
+
 # 2.1
 @app.route('/user/search', methods=['GET'])
+@login_required
 def get_user_search():
     if request.method == 'GET':
         content = request.args.get('group_name', '')
@@ -172,8 +291,10 @@ def get_user_search():
         return jsonify({"code": 500,
                         "status": f"method{request.method} not supported"})
 
+
 # 2.2
 @app.route('/user/delete', methods=['POST'])
+@login_required
 def get_user_delete():
     if request.method == 'POST':
         user_id, group_id = request.json['user_id'], request.json['group_id']
@@ -182,13 +303,13 @@ def get_user_delete():
                         WHERE t.BorrowId = {user_id} AND b.GroupId = {group_id} AND t.PaidStatus = "Process"\
                         GROUP BY t.BorrowId;'
         cols, count = init_conn.ddl_db(db_conn, count_process)
-        print(cols,count)
+        # print(cols,count)
         if len(count) == 0:
             delete_process = f'DELETE FROM GroupJoin WHERE UserId = {user_id} AND GroupId = {group_id}'
             rsl = init_conn.ddl_db_uid(db_conn, delete_process)
             if rsl:
-                return jsonify({"code": 200,
-                                "status": "success"})
+                return jsonify({"code": 200
+                                })
             else:
                 return jsonify({"code": 500,
                                 "status": "delete failed."})
@@ -199,8 +320,10 @@ def get_user_delete():
         return jsonify({"code": 500,
                         "status": f"method{request.method} not supported"})
 
+
 # 2.3
 @app.route('/user/select_group', methods=['GET'])
+@login_required
 def get_user_select_group():
     if request.method == 'GET':
         content = request.args.get('user_id', '')
@@ -220,6 +343,7 @@ def get_user_select_group():
 
 # 2.4
 @app.route('/user/ra', methods=['GET'])
+@login_required
 def get_user_ra():
     if request.method == 'GET':
         content = request.args.get('user_id', '')
@@ -244,8 +368,10 @@ def get_user_ra():
         return jsonify({"code": 500,
                         "status": f"method{request.method} not supported"})
 
+
 # 2.5
-@app.route('/user/status_category',methods=['GET'])
+@app.route('/user/status_category', methods=['GET'])
+@login_required
 def user_status_category():
     if request.method == 'GET':
         user_id = request.args.get('user_id', '')
@@ -258,9 +384,199 @@ def user_status_category():
                         WHERE T.BorrowId = {user_id} AND PaidStatus = "Process" \
                         GROUP BY Category;'
         cols2, results2 = init_conn.ddl_db(db_conn, select_sql2)
+
         # print(results1)
         # print(results2)
         list_rsl = check_bill(results1, results2, title='Category')
+        ans = {
+            "code": 200,
+            "data": list_rsl
+        }
+        return jsonify(ans)
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+# 2.6 search joined event
+@app.route('/user/search_join_event', methods=['GET'])
+@login_required
+def search_event_join():
+    if request.method == 'GET':
+        UserId = request.args.get('user_id', '')
+        select_sql = f'SELECT * FROM PublicActivity natural join ActivityJoin where UserId = {UserId}'
+        cols, results = init_conn.ddl_db(db_conn, select_sql)
+        list_rsl = cur_to_dict(cols,results)
+        ans = {
+            "code": 200,
+            "data": list_rsl
+        }
+        return jsonify(ans)
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+
+# 2.7 search created event
+@app.route('/user/search_create_event', methods=['GET'])
+@login_required
+def search_event_create():
+    if request.method == 'GET':
+        CreatorId = request.args.get('user_id', '')
+        select_sql = f'SELECT * FROM PublicActivity where CreatorId = {CreatorId}'
+        cols, results = init_conn.ddl_db(db_conn, select_sql)
+        list_rsl = cur_to_dict(cols,results)
+        ans = {
+            "code": 200,
+            "data": list_rsl
+        }
+        return jsonify(ans)
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+"""
+part 3: public activity memo function
+"""
+
+
+# 3.1 create event(add location info also)
+@app.route('/pa/create', methods=['POST'])
+@login_required
+def create_event():
+    if request.method == 'POST':
+        # inputs get by json
+        EventName, EventType, StartDate, EndDate, CreatorId, Fee, Location, ZipCode = request.json['event_name'], \
+        request.json['event_type'], request.json['start_date'], request.json['end_date'], request.json['creator_id'], \
+        request.json['fee'], request.json['location'], request.json['zipcode']
+        # set placeid
+        PlaceId = int(datetime.timestamp(datetime.now()))
+        # db insert, both table
+        # if not existed, add new one
+        select_place = f'select PlaceId from Place where Location = "{Location}"'
+        cols, results = init_conn.ddl_db(db_conn, select_place)
+        if results.__len__() > 0:
+            PlaceId = results[0][0]
+            # print(PlaceId)
+            rsl1 = 1
+        else:
+            insert_place = f'insert into Place(PlaceId,Location, ZipCode) \
+                                VALUES ({PlaceId},"{Location}", {ZipCode})'
+            rsl1 = init_conn.ddl_db_uid(db_conn, insert_place)
+
+        insert_event = f'insert into PublicActivity(EventName, EventType, StartDate, EndDate, CreatorId, Fee,PlaceId) \
+                        VALUES ("{EventName}", "{EventType}", "{StartDate}", "{EndDate}", {CreatorId}, {Fee},{PlaceId})'
+        rsl2 = init_conn.ddl_db_uid(db_conn, insert_event)
+        if rsl1 and rsl2:
+            return jsonify({
+                "code": 200
+            })
+        else:
+            return jsonify({"code": 500,
+                            "status": f"create failed."})
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+    # response
+
+
+# 3.2 join event(transaction)
+@app.route('/pa/join', methods=['POST'])
+@login_required
+def join_event():
+    if request.method == 'POST':
+        # inputs get by json
+        UserId, EventId = request.json['user_id'],request.json['event_id']
+
+        # ?条件：若时间 > enddate 则不可加入event
+
+        # db insert(activityjoin + 1)
+        insert_act = f'INSERT INTO ActivityJoin(EventId, UserId) \
+                            VALUES ({EventId},"{UserId}")'
+        rsl1 = init_conn.ddl_db_uid(db_conn, insert_act)
+        # db update(visited time for place id + 1)
+        update_place = f'UPDATE Place SET TimeVisit = TimeVisit + 1 \
+                         WHERE PlaceId in (select PlaceId from PublicActivity where EventId = "{EventId}")'
+        rsl2 = init_conn.ddl_db_uid(db_conn, update_place)
+        # *db insert(no transaction here)
+
+        # response
+        if rsl1 and rsl2:
+            return jsonify({
+                "code": 200
+            })
+        else:
+            return jsonify({"code": 500,
+                            "status": f"join failed."})
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+
+# 3.3 delete event(creator权限)
+@app.route('/pa/delete_create', methods=['POST'])
+@login_required
+def delete_create_event():
+    if request.method == 'POST':
+
+        # inputs get by json
+        EventId, CreatorId = request.json['event_id'],request.json['user_id']
+        # db check and delete
+        select_act = f'SELECT EventId from PublicActivity where CreatorId = {CreatorId} and EventId = {EventId}'
+        cols, results = init_conn.ddl_db(db_conn, select_act)
+        # print(cols,count)
+        if len(results) > 0:
+            # f'DELETE FROM GroupJoin WHERE UserId = {user_id} AND GroupId = {group_id}'
+            delete_act = f'DELETE FROM PublicActivity \
+                        WHERE EventId = {EventId}'
+            rsl = init_conn.ddl_db_uid(db_conn, delete_act)
+            # response
+            if rsl:
+                return jsonify({
+                    "code": 200
+                })
+
+        return jsonify({"code": 500,
+                        "status": f"no authority.delete failed."})
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+# 3.4 delete person from event(person)
+@app.route('/pa/delete_join', methods=['POST'])
+@login_required
+def delete_join_event():
+    if request.method == 'POST':
+        # inputs get by json
+        EventId, UserId = request.json['event_id'],request.json['user_id']
+
+        # db delete
+        delete_act = f'DELETE FROM ActivityJoin \
+                        WHERE EventId = {EventId} and UserId = {UserId}'
+        rsl = init_conn.ddl_db_uid(db_conn, delete_act)
+        # response
+        if rsl:
+            return jsonify({
+                "code": 200
+            })
+        else:
+            return jsonify({"code": 500,
+                            "status": f"delete failed."})
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+
+# 3.7 search all event from dashboard
+@app.route('/pa/search_all', methods=['GET'])
+@login_required
+def search_event_all():
+    # eventid, event name, all info
+    if request.method == 'GET':
+        keyword = request.args.get('keyword', '')
+        select_event = f'select * from PublicActivity where EventName like "%{keyword}%"'
+        cols, results = init_conn.ddl_db(db_conn, select_event)
+        list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
             "data": list_rsl

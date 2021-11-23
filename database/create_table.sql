@@ -49,6 +49,38 @@ CREATE TABLE GroupJoin(
 		FOREIGN KEY (GroupId) REFERENCES PrivateGroup(GroupId) ON DELETE CASCADE,
 		FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE
 );
+# updated 1123
+CREATE TABLE PublicActivity(
+	EventId INT AUTO_INCREMENT,
+	EventName VARCHAR(255),
+	EventType VARCHAR(32),
+	StartDate TIMESTAMP NOT NULL,
+	EndDate TIMESTAMP NOT NULL,
+	CreatorId INT,
+	Fee REAL DEFAULT 0,
+	PlaceId INT,
+	PRIMARY KEY(EventId),
+	FOREIGN KEY (PlaceId) REFERENCES Place(PlaceId) ON DELETE CASCADE,
+	FOREIGN KEY (CreatorId) REFERENCES User(UserId) ON DELETE CASCADE
+);
+# updated 1123
+CREATE TABLE Place(
+	PlaceId INT,
+	Location VARCHAR(255),
+	ZipCode VARCHAR(32),
+	TimeVisit INT DEFAULT 0,
+	PRIMARY KEY (PlaceId)
+);
+
+# updated 1123
+CREATE TABLE ActivityJoin(
+		EventId INT,
+		UserId INT,
+		PRIMARY KEY (EventId, UserId),
+		FOREIGN KEY (EventId) REFERENCES PublicActivity(EventId) ON DELETE CASCADE,
+		FOREIGN KEY (UserId) REFERENCES User(UserId) ON DELETE CASCADE
+);
+
 
 DECLARE currId int;
     DECLARE myCur CURSOR FOR SELECT DISTINCT UserId FROM GroupJoin WHERE GroupId = new.GroupId AND UserId <> new.LendId;
