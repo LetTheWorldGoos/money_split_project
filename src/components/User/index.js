@@ -12,6 +12,7 @@ import "./user.css";
 export default function User() {
   let { id } = useParams();
   let [key, setkey] = useState();
+  let [eKey, setEKey] = useState("");
   let [{ UserName, activities, groups, loaded, loans }, setStates] = useState(
     1,
     2,
@@ -29,38 +30,45 @@ export default function User() {
     });
   }, [id]);
 
-  function displayGrps(data,id) {
+  function displayGrps(data, id) {
     return data.map((group, index) => {
       return (
-          <div key={index} className="Group">
-            <Link
-                key={group.GroupId}
-                to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
-                >
+        <div key={index} className="Group">
+          <Link
+            key={group.GroupId}
+            to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
+          >
             <li>Group Name: {group.GroupName}</li>
-            </Link>
-            <button userid={id} groupid={group.GroupId} ind={index} onClick={UserLeave}>Leave the Group</button>
-          </div>
+          </Link>
+          <button
+            userid={id}
+            groupid={group.GroupId}
+            ind={index}
+            onClick={UserLeave}
+          >
+            Leave the Group
+          </button>
+        </div>
       );
     });
   }
 
-  async function UserLeave(event){
-    console.log(event.target.attributes.userid.value)
-    console.log(event.target.attributes.groupid.value)
-    let userid = event.target.attributes.userid.value
-    let groupid = event.target.attributes.groupid.value
+  async function UserLeave(event) {
+    console.log(event.target.attributes.userid.value);
+    console.log(event.target.attributes.groupid.value);
+    let userid = event.target.attributes.userid.value;
+    let groupid = event.target.attributes.groupid.value;
     let body = {
       group_id: groupid,
-      user_id:userid
-    }
-    let res = await axios.post("http://localhost:8888/user/delete",body)
-    console.log(res)
-    alert(res.data.status)
-    if(res.data.status === "success"){
-      let index = Number(event.target.attributes.ind.value)
-      let GroupsBefore = groups
-      GroupsBefore.splice(index,1)
+      user_id: userid,
+    };
+    let res = await axios.post("http://localhost:8888/user/delete", body);
+    console.log(res);
+    alert(res.data.status);
+    if (res.data.status === "success") {
+      let index = Number(event.target.attributes.ind.value);
+      let GroupsBefore = groups;
+      GroupsBefore.splice(index, 1);
       setStates({
         UserName: UserName,
         activities: activities,
@@ -69,12 +77,18 @@ export default function User() {
         loaded: true,
       });
     }
-}
+  }
 
   let handleChange = (event) => {
     console.log(event.target.value);
     setkey(event.target.value);
   };
+
+  let handleEventSearch = (event) => {
+    console.log(event.target.value);
+    setEKey(event.target.value);
+  };
+
   return (
     <div className="User">
       <h1 className="header">
@@ -84,6 +98,17 @@ export default function User() {
         <label>Search Group: </label>
         <input type="text" placeholder="Group Name" onChange={handleChange} />
         <Link to={{ pathname: "/search", query: key }}>
+          <button>Search</button>
+        </Link>
+      </form>
+      <form className="Search Bar">
+        <label>Search Event: </label>
+        <input
+          type="text"
+          placeholder="Event Name"
+          onChange={handleEventSearch}
+        />
+        <Link to={{ pathname: "/search/event", query: eKey }}>
           <button>Search</button>
         </Link>
       </form>
@@ -98,7 +123,7 @@ export default function User() {
         </div>
         <div className="Groups column">
           <h3 className="Title">Groups</h3>
-          {loaded ? displayGrps(groups,id) : "loading..."}
+          {loaded ? displayGrps(groups, id) : "loading..."}
         </div>
       </div>
     </div>
