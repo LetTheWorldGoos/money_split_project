@@ -61,12 +61,12 @@ class User(object):
         if not df.empty:
             self.password_hash = df['Passwd'].values[0]
 
-    def get_id(self):
+    def get_id(self, username):
         """
         run only when username is identified
         :return:
         """
-        sql = f"select UserId from {tablename} where Username = '{self.username}';"
+        sql = f"select UserId from {tablename} where Username = '{username}';"
         conn.ping(reconnect=True)
         df = pd.read_sql(sql, con=self.con)
         if not df.empty:

@@ -64,7 +64,11 @@ def register():
 
         else:
             user_rg.register(username=username, password=password, email=email)
-            return jsonify({"code": 200})
+            user_login = User()
+            return jsonify({"code": 200,
+                            "username": username,
+                            "user_id": int(user_login.get_id(username))
+                            })
     else:
         return jsonify({
             "code": 500,
@@ -92,7 +96,7 @@ def login():
 
                  # "login": 1,
                  "username": user_login.username,
-                 "user_id": int(user_login.get_id())})
+                 "user_id": int(user_login.get_id(username))})
         else:
             return jsonify({"code": 500,
                             # "login": 1,
