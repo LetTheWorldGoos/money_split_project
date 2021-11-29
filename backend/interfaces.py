@@ -91,7 +91,8 @@ def login():
                 {"code": 200,
 
                  # "login": 1,
-                 "username": user_login.username})
+                 "username": user_login.username,
+                 "user_id": int(user_login.get_id())})
         else:
             return jsonify({"code": 500,
                             # "login": 1,
