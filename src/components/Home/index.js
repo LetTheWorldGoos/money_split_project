@@ -19,6 +19,13 @@ import {
   createIcon,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router";
+import { Flex, SimpleGrid } from "@chakra-ui/layout";
+import {
+  FcInTransit,
+  FcMoneyTransfer,
+  FcCollaboration,
+  FcCalendar,
+} from "react-icons/fc";
 
 export default function Home() {
   const history = useHistory();
@@ -114,6 +121,29 @@ export default function Home() {
           </Stack>
         </Stack>
       </Container>
+      <Box p={4}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+          <Feature
+            icon={<Icon as={FcMoneyTransfer} w={10} h={10} />}
+            title={"Split money with your friends"}
+            text={
+              "Keep track of you shared bills and who owes who"
+            }
+          />
+          <Feature
+            icon={<Icon as={FcCollaboration} w={10} h={10} />}
+            title={"Create private groups"}
+            text={
+              "Organize and pplit expenses with your groups: friends, family, and housemates"
+            }
+          />
+          <Feature
+            icon={<Icon as={FcCalendar} w={10} h={10} />}
+            title={"Join public activities"}
+            text={"Don't miss any opportunity to have fun and meet cool people"}
+          />
+        </SimpleGrid>
+      </Box>
     </>
   );
   // return(
@@ -134,6 +164,27 @@ export default function Home() {
   // </Box>
   // )
 }
+
+const Feature = ({ title, text, icon }) => {
+  return (
+    <Stack>
+      <Flex
+        w={16}
+        h={16}
+        align={"center"}
+        justify={"center"}
+        color={"white"}
+        rounded={"full"}
+        bg={"gray.100"}
+        mb={1}
+      >
+        {icon}
+      </Flex>
+      <Text fontWeight={600}>{title}</Text>
+      <Text color={"gray.600"}>{text}</Text>
+    </Stack>
+  );
+};
 
 const Arrow = createIcon({
   displayName: "Arrow",

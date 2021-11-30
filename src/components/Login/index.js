@@ -82,10 +82,10 @@ axios.defaults.withCredentials = true;
                 <Button
                   colorScheme={"green"}
                   onClick={LoginAction}
-                  bg={'blue.400'}
+                  bg={'green.400'}
                   color={'white'}
                   _hover={{
-                    bg: 'blue.500',
+                    bg: 'green.500',
                   }}>
                   Sign in
                 </Button>
