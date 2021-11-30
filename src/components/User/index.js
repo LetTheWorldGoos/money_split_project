@@ -12,7 +12,7 @@ import Chart from "../Chart"
 import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { Avatar } from "@chakra-ui/avatar";
-
+import SimpleSidebar from "../SimpleSidebar"
 axios.defaults.withCredentials = true
 export default function User() {
   let { id } = useParams();
@@ -100,16 +100,18 @@ export default function User() {
   };
 
   return (
+    <Flex>
+      <SimpleSidebar Name={UserName}/>
     <Box className="User">
-      <Heading mt="5" fontSize="5xl">
-        {loaded ? UserName.toUpperCase() : "loading..."}
-      </Heading>
+      <Flex>
+      <Box margin="10px">
         <label>Search Group: </label>
         <input type="text" placeholder="Group Name" onChange={handleChange} />
         <Link to={{ pathname: "/search", query: key }}>
           <Button colorScheme="teal">Search</Button>
         </Link>
-
+      </Box>
+      <Box  margin="10px">
         <label>Search Event: </label>
         <input
           type="text"
@@ -119,22 +121,25 @@ export default function User() {
         <Link to={{ pathname: "/search/event", query: eKey }}>
           <Button colorScheme="teal">Search</Button>
         </Link>
+      </Box>
+      </Flex>
         <Grid templateColumns="repeat(3, 1fr)" gap={6} h="full">
-        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Loans in Categories</Heading>
           {loaded ? displayLons(loans) : "loading..."}
           {loaded? <Chart data={loans}/> : "loading..." }
         </Box>
-        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Recent Activities</Heading>
           {loaded ? displayActs(activities) : "loading..."}
         </Box>
-        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Groups</Heading>
           {loaded ? displayGrps(groups, id) : "loading..."}
         </Box>
       </Grid>
     </Box>
+    </Flex>
   );
 }
 
