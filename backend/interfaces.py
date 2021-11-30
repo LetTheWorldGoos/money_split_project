@@ -1,5 +1,5 @@
 import functools
-from flask import Flask, request, jsonify, session  # make_response, send_from_directory
+from flask import Flask, request, jsonify, session, make_response  # send_from_directory
 import flask_cors
 
 # import json
@@ -15,7 +15,7 @@ app = Flask(__name__)
 init_conn = mysql_conn()
 db_conn = init_conn.start_conn()
 # Cross origin
-flask_cors.CORS(app, supports_credentials=False)
+flask_cors.CORS(app, supports_credentials=True)
 # json specify
 app.config['JSON_AS_ASCII'] = False
 # session key
@@ -40,6 +40,17 @@ def login_required(func):
             return func(*args, **kwargs)
 
     return inner
+
+
+# session problem
+@app.after_request
+def set_frontend(resp):
+    resp = make_response(resp)
+    resp.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:3000'  # frontend address
+    resp.headers['Access-Control-Allow-Methods'] = 'GET,POST,PUT,DELETE,OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type,Content-Length,Authorization,Accept,X-Requested-With'
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
+    return resp
 
 
 """
@@ -575,35 +586,57 @@ def join_event():
     if request.method == 'POST':
         # inputs get by json
         UserId, EventId = request.json['user_id'], request.json['event_id']
-
-        # potential condition：if current time > end date then cannot join event
-        select_enddate = f'select EndDate from PublicActivity where EventId = "{EventId}"'
-        cols, results = init_conn.ddl_db(db_conn, select_enddate)
-        if datetime.now() > results[0][0]:
-            return jsonify({"code": 500,
-                            "status": f"join failed. Event Expired."})
-
-        # db insert(activityjoin + 1)
+        # use trigger here
         insert_act = f'INSERT INTO ActivityJoin(EventId, UserId) \
-                        VALUES ({EventId},"{UserId}")'
+                                 VALUES ({EventId},"{UserId}")'
         try:
             rsl1 = init_conn.ddl_db_uid(db_conn, insert_act)
-            # db update(visited time for place id + 1)
-            update_place = f'UPDATE Place SET TimeVisit = TimeVisit + 1 \
-                             WHERE PlaceId in (select PlaceId from PublicActivity where EventId = "{EventId}")'
-            rsl2 = init_conn.ddl_db_uid(db_conn, update_place)
-            # *db insert(no transaction here)
-
-            # response
             return jsonify({
-                    "code": 200
-                })
+                "code": 200
+            })
         except Exception as e:
+            print(rsl1)
+            print(e)
             return jsonify({"code": 500,
                             "status": "join failed."})
     else:
         return jsonify({"code": 500,
                         "status": f"method{request.method} not supported"})
+
+
+# def join_event():
+#     if request.method == 'POST':
+#         # inputs get by json
+#         UserId, EventId = request.json['user_id'], request.json['event_id']
+#
+#         # potential condition：if current time > end date then cannot join event
+#         select_enddate = f'select EndDate from PublicActivity where EventId = "{EventId}"'
+#         cols, results = init_conn.ddl_db(db_conn, select_enddate)
+#         if datetime.now() > results[0][0]:
+#             return jsonify({"code": 500,
+#                             "status": f"join failed. Event Expired."})
+#
+#         # db insert(activityjoin + 1)
+#         insert_act = f'INSERT INTO ActivityJoin(EventId, UserId) \
+#                         VALUES ({EventId},"{UserId}")'
+#         try:
+#             rsl1 = init_conn.ddl_db_uid(db_conn, insert_act)
+#             # db update(visited time for place id + 1)
+#             update_place = f'UPDATE Place SET TimeVisit = TimeVisit + 1 \
+#                              WHERE PlaceId in (select PlaceId from PublicActivity where EventId = "{EventId}")'
+#             rsl2 = init_conn.ddl_db_uid(db_conn, update_place)
+#             # *db insert(no transaction here)
+#
+#             # response
+#             return jsonify({
+#                     "code": 200
+#                 })
+#         except Exception as e:
+#             return jsonify({"code": 500,
+#                             "status": "join failed."})
+#     else:
+#         return jsonify({"code": 500,
+#                         "status": f"method{request.method} not supported"})
 
 
 # 3.3 delete event(creator权限)
@@ -670,6 +703,27 @@ def search_event_all():
         keyword = request.args.get('keyword', '')
         select_event = f'select * from PublicActivity where EventName like "%{keyword}%"'
         cols, results = init_conn.ddl_db(db_conn, select_event)
+        list_rsl = cur_to_dict(cols, results)
+        ans = {
+            "code": 200,
+            "data": list_rsl
+        }
+        return jsonify(ans)
+    else:
+        return jsonify({"code": 500,
+                        "status": f"method{request.method} not supported"})
+
+
+# transaction
+@app.route('/tr_info', methods=['GET'])
+@login_required
+def get_tr_info_yr():
+    if request.method == 'GET':
+        userid = request.args.get('user_id', '')
+        year = request.args.get('year', '')
+        # call store procedure here
+        stored_procedure = f'call Balance({userid},"{year}")'
+        cols, results = init_conn.ddl_db(db_conn, stored_procedure)
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
