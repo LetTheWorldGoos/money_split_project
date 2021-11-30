@@ -76,6 +76,7 @@ def register():
         else:
             user_rg.register(username=username, password=password, email=email)
             user_login = User()
+            session['username'] = username
             return jsonify({"code": 200,
                             "username": username,
                             "user_id": int(user_login.get_id(username))
@@ -714,7 +715,7 @@ def search_event_all():
                         "status": f"method{request.method} not supported"})
 
 
-# transaction
+# 4.0 transaction
 @app.route('/tr_info', methods=['GET'])
 @login_required
 def get_tr_info_yr():

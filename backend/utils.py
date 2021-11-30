@@ -42,7 +42,7 @@ def cur_to_dict(names, data):
             if isinstance(line[i], datetime.datetime):
                 temp = datetime.datetime.strftime(line[i], format='%Y-%m-%d %H:%M:%S')
                 keyval[names[i]] = temp
-            elif isinstance(line[i],Decimal):
+            elif isinstance(line[i], Decimal):
                 keyval[names[i]] = float(line[i])
             else:
                 keyval[names[i]] = line[i]

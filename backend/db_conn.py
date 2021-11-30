@@ -12,7 +12,8 @@ class mysql_conn:
         self.dbname = 'splitmunity'
 
     def start_conn(self):
-        conn = pymysql.connect(self.host, self.user, self.passwd, self.dbname)
+        conn = pymysql.connect(self.host, self.user, self.passwd, self.dbname, autocommit=True)
+        # autocommit=True
         return conn
 
     @staticmethod
