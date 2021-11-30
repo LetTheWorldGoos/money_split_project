@@ -1,6 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { useLocation, useParams } from "react-router";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input } from "@chakra-ui/input";
+import { Button } from "@chakra-ui/button";
+import { Box, Flex, Heading } from "@chakra-ui/layout";
 
 function AddNewBill(props) {
   const { state } = useLocation();
@@ -23,51 +27,63 @@ function AddNewBill(props) {
   };
   return (
     <>
-      <div style={{ textAlign: "center" }}>
-        <h1>Current Group Id {id}</h1>
-        <h1>Current User Id {uid}</h1>
-        <form action="/action_page.php" onSubmit={handleSubmit}>
-          <label for="amount">Amount: </label>
+      <Flex width="full" align="center" justifyContent="center">
+        <Box
+          p={8}
+          maxWidth="500px"
+          borderWidth={1}
+          borderRadius={8}
+          boxShadow="lg"
+          textAlign="center"
+        >
+          <Heading>Current Group Id {id}</Heading>
+          <Heading>Current User Id {uid}</Heading>
+          <form action="/action_page.php" onSubmit={handleSubmit}>
+            <FormControl>
+              <FormLabel for="amount">Amount: </FormLabel>
+              <Input
+                type="text"
+                id="amount"
+                name="amount"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                }}
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <FormLabel for="category">Category</FormLabel>
+              <Input
+                type="text"
+                id="category"
+                name="category"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              />
+            </FormControl>
+            <br />
+            <FormControl>
+              <FormLabel for="description">Description</FormLabel>
+              <Input
+                type="text"
+                id="description"
+                name="description"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+            </FormControl>
+            <br />
+            <br />
+            <Button type="submit">Submit</Button>
+          </form>
           <br />
-          <input
-            type="text"
-            id="amount"
-            name="amount"
-            value={amount}
-            onChange={(e) => {
-              setAmount(e.target.value);
-            }}
-          />
-          <br />
-          <label for="category">Category</label>
-          <br />
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-            }}
-          />
-          <br />
-          <label for="description">Description</label>
-          <br />
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
-          <br />
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-        <br />
-      </div>
+        </Box>
+      </Flex>
     </>
   );
 }

@@ -11,6 +11,8 @@ import { useHistory, useLocation } from "react-router";
 import Balance from "./Balance";
 import Member from "./Member";
 import History from "./History";
+import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
 
 function Group() {
   const { state } = useLocation();
@@ -55,28 +57,32 @@ function Group() {
 
   return (
     <div style={{ marginLeft: "50px", marginRight: "50px" }}>
-      <h1>Group ID {id}</h1>
-      <h1>Current User ID {uid || 1}</h1>
-      <div style={{ marginLeft: "90%" }}>
-        <button style={{ marginRight: "5px" }} onClick={handleSettle}>
-          Settle
-        </button>
-        <button
-          onClick={() =>
-            history.push({
-              pathname: `/group/${id}/add`,
-              state: { uid: uid },
-            })
-          }
-        >
-          Add
-        </button>
-      </div>
-      <div style={{ display: "flex", "justify-content": "space-between" }}>
+      <Heading mt="5" fontSize="5xl">Group ID {id}</Heading>
+      <Flex mr="50" mb="5">
+        <Heading fontSize="2xl">Current User ID {uid || 1}</Heading>
+        <Spacer />
+        <Box>
+          <Button colorScheme="teal" mr="5" onClick={handleSettle}>
+            Settle Your Debts
+          </Button>
+          <Button
+            colorScheme="teal"
+            onClick={() =>
+              history.push({
+                pathname: `/group/${id}/add`,
+                state: { uid: uid },
+              })
+            }
+          >
+            Add New Bill
+          </Button>
+        </Box>
+      </Flex>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6} h="500">
         <History records={records} />
         <Balance loans={loans} />
         <Member members={members} />
-      </div>
+      </Grid>
     </div>
   );
 }

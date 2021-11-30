@@ -1,17 +1,25 @@
+import { Box, Heading } from "@chakra-ui/layout";
+
 function Balance(props) {
   const { loans } = props;
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
+    <Box
+      maxW="sm"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="scroll"
+      boxShadow="md"
+      bg="white"
     >
-      <h1>Balance</h1>
+      <Heading textAlign="center" size="lg" p="2">Balance</Heading>
       {loans.map((item) => {
-        return <p>{item.UserName} {item.Amount} {item.Date}</p>;
+        return (
+          <Box p={5} borderWidth="1px">
+            {item.UserName} {item.Amount} {item.Date}
+          </Box>
+        );
       })}
-    </div>
+    </Box>
   );
 }
 
