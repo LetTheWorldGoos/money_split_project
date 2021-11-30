@@ -13,7 +13,7 @@ function AddNewBill(props) {
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const BASE_URI = "http://localhost:8888";
+  const BASE_URI = "http://localhost:8888/";
   const handleSubmit = (event) => {
     event.preventDefault();
     alert("submit?");
