@@ -8,7 +8,9 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import "./user.css";
+import Chart from "../Chart"
 
+axios.defaults.withCredentials = true
 export default function User() {
   let { id } = useParams();
   let [key, setkey] = useState();
@@ -116,6 +118,7 @@ export default function User() {
         <div className="Loans column">
           <h3 className="Title">Loans in Categories</h3>
           {loaded ? displayLons(loans) : "loading..."}
+          {loaded? <Chart data={loans}/> : "loading..." }
         </div>
         <div className="Activities column">
           <h3 className="Title">Recent Activities</h3>
@@ -132,17 +135,18 @@ export default function User() {
 
 async function getStates(id) {
   let info = await axios.get(
-    "http://localhost:8888/get_info?user_id=" + String(id)
+    "http://localhost:8888/get_info?user_id=" + String(id),{withCredentials: true}
   );
   let acts = await axios.get(
-    "http://localhost:8888/user/ra?user_id=" + String(id)
+    "http://localhost:8888/user/ra?user_id=" + String(id),{withCredentials: true}
   );
   let grps = await axios.get(
-    "http://localhost:8888/user/select_group?user_id=" + String(id)
+    "http://localhost:8888/user/select_group?user_id=" + String(id),{withCredentials: true}
   );
   let lons = await axios.get(
-    "http://localhost:8888/user/status_category?user_id=" + String(id)
+    "http://localhost:8888/user/status_category?user_id=" + String(id),{withCredentials: true}
   );
+  console.log(info)
   let UserName = info.data.data.UserName;
   let activities = [];
   let groups = [];

@@ -6,7 +6,10 @@ import {
   Link,
   useParams,
 } from "react-router-dom";
+import Home from "../Home"
 import User from "../User";
+import Login from "../Login";
+import Register from "../Register";
 import Group from "../Group";
 import AddNewBill from "../Group/addNewBill";
 import Search from "../Search";
@@ -23,6 +26,9 @@ export default class App extends Component {
       <div className="App">
         <Router>
           <Switch>
+            <Route exact path="/" children={<Home />} />
+            <Route exact path="/login" children={<Login />}/>
+            <Route exact path="/register" children={<Register />}/>
             <Route exact path="/group/:id" children={<Group />} />
             <Route exact path="/group/:id/add" children={<AddNewBill />} />
             <Route exact path="/user/:id" children={<User />} />

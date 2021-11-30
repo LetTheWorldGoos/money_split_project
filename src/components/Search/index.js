@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
+axios.defaults.withCredentials = true
+
 export default function Search() {
   let { query } = useLocation();
   let [key, setkey] = useState(null);
