@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import { Button } from "@chakra-ui/button";
+import { Heading } from "@chakra-ui/layout";
 
 export default function EventSearch() {
   let { query } = useLocation();
@@ -10,7 +12,7 @@ export default function EventSearch() {
   let [{ res, loaded }, setRes] = useState(0, false);
   let [joinedEvents, setJoinedEvents] = useState([]);
   let [createdEvents, setCreatedEvents] = useState([]);
-  const urlPrefix = "http://127.0.0.1:8888/";
+  const urlPrefix = "http://localhost:8888/";
 
   useEffect(() => {
     getEvent(key ? key : query).then((groups) => {
@@ -26,12 +28,16 @@ export default function EventSearch() {
             .then((cEvents) => {
               let joinedEventIds = [];
               let createdEventIds = [];
-              jEvents.data.data.forEach((e) => {
-                joinedEventIds.push(e.EventId);
-              });
-              cEvents.data.data.forEach((e) => {
-                createdEventIds.push(e.EventId);
-              });
+              if (jEvents) {
+                jEvents.data.data.forEach((e) => {
+                  joinedEventIds.push(e.EventId);
+                });
+              }
+              if (cEvents) {
+                cEvents.data.data.forEach((e) => {
+                  createdEventIds.push(e.EventId);
+                });
+              }
               setRes({ res: groups, loaded: true });
               setJoinedEvents(joinedEventIds);
               setCreatedEvents(createdEventIds);
@@ -85,9 +91,9 @@ export default function EventSearch() {
         <div key={index} className="Group">
           <li>
             Event Name: {event.EventName}
-            <button id={event.EventId} onClick={handleJoin}>
+            <Button id={event.EventId} onClick={handleJoin} colorScheme="teal" ml="2">
               Join
-            </button>
+            </Button>
           </li>
         </div>
       );
@@ -114,10 +120,10 @@ export default function EventSearch() {
   return (
     <>
       <div className="Search">
-        <h1>Search Event</h1>
+        <Heading>Search Event</Heading>
         <label>Search Event: </label>
         <input type="text" placeholder="Event Name" onChange={handleChange} />
-        <button onClick={handleSubmit}>Search</button>
+        <Button onClick={handleSubmit} colorScheme="teal" ml="2">Search</Button>
         <div className="Results">
           {loaded ? displayEvents(res) : "loading..."}
         </div>

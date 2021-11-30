@@ -54,6 +54,7 @@ export default function User() {
             groupid={group.GroupId}
             ind={index}
             onClick={UserLeave}
+            colorScheme="teal"
           >
             Leave the Group
           </Button>
@@ -106,7 +107,7 @@ export default function User() {
         <label>Search Group: </label>
         <input type="text" placeholder="Group Name" onChange={handleChange} />
         <Link to={{ pathname: "/search", query: key }}>
-          <Button>Search</Button>
+          <Button colorScheme="teal">Search</Button>
         </Link>
 
         <label>Search Event: </label>
@@ -116,7 +117,7 @@ export default function User() {
           onChange={handleEventSearch}
         />
         <Link to={{ pathname: "/search/event", query: eKey }}>
-          <Button>Search</Button>
+          <Button colorScheme="teal">Search</Button>
         </Link>
         <Grid templateColumns="repeat(3, 1fr)" gap={6} h="full">
         <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">

@@ -12,13 +12,13 @@ function Balance(props) {
       bg="white"
     >
       <Heading textAlign="center" size="lg" p="2">Balance</Heading>
-      {loans.map((item) => {
+      {loans ? loans.map((item) => {
         return (
           <Box p={5} borderWidth="1px">
             {item.UserName} {item.Amount} {item.Date}
           </Box>
         );
-      })}
+      }) : "loading..."}
     </Box>
   );
 }

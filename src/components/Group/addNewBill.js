@@ -13,10 +13,11 @@ function AddNewBill(props) {
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const BASE_URI = "http://localhost:8888";
   const handleSubmit = (event) => {
     event.preventDefault();
     alert("submit?");
-    axios.post("http://127.0.0.1:8888/group/add_transaction", {
+    axios.post(BASE_URI + "group/add_transaction", {
       user_id: uid,
       group_id: id,
       lend_id: uid,
@@ -35,6 +36,7 @@ function AddNewBill(props) {
           borderRadius={8}
           boxShadow="lg"
           textAlign="center"
+          bg="white"
         >
           <Heading>Current Group Id {id}</Heading>
           <Heading>Current User Id {uid}</Heading>
@@ -79,7 +81,9 @@ function AddNewBill(props) {
             </FormControl>
             <br />
             <br />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" colorScheme="teal">
+              Submit
+            </Button>
           </form>
           <br />
         </Box>

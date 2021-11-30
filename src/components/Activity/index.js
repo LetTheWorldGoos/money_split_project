@@ -1,11 +1,14 @@
+import { Button } from "@chakra-ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+axios.defaults.withCredentials = true;
 function Activity() {
-  const uid = 1001;
-  const [joinedPA, setJoinedPA] = useState([]);
-  const [createdPA, setCreatedPA] = useState([]);
-  const urlPrefix = "http://127.0.0.1:8888/";
+  const uid = 1;
+  const [joinedPA, setJoinedPA] = useState(null);
+  const [createdPA, setCreatedPA] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const urlPrefix = "http://localhost:8888/";
   useEffect(() => {
     axios
       .get(`${urlPrefix}user/search_join_event`, {
@@ -21,6 +24,7 @@ function Activity() {
             console.log(res2);
             setJoinedPA(res1.data.data);
             setCreatedPA(res2.data.data);
+            setLoaded(true);
           });
       })
       .catch((err) => {
@@ -48,35 +52,39 @@ function Activity() {
       <div>
         You have joined:
         <ul>
-          {joinedPA.map((pa) => {
-            return (
-              <>
-                <li>
-                  {pa.EventName}{" "}
-                  <button id={pa.EventId} onClick={handleLeave}>
-                    Leave
-                  </button>
-                </li>
-              </>
-            );
-          })}
+          {joinedPA
+            ? joinedPA.map((pa) => {
+                return (
+                  <>
+                    <li>
+                      {pa.EventName}{" "}
+                      <button id={pa.EventId} onClick={handleLeave}>
+                        Leave
+                      </button>
+                    </li>
+                  </>
+                );
+              })
+            : "loading..."}
         </ul>
       </div>
       <div>
         You have created:
         <ul>
-          {createdPA.map((pa) => {
-            return (
-              <>
-                <li>
-                  {pa.EventName}{" "}
-                  <button id={pa.EventId} onClick={handleCancel}>
-                    Cancel
-                  </button>
-                </li>
-              </>
-            );
-          })}
+          {createdPA
+            ? createdPA.map((pa) => {
+                return (
+                  <>
+                    <li>
+                      {pa.EventName}{" "}
+                      <Button id={pa.EventId} onClick={handleCancel} colorScheme="red">
+                        Cancel
+                      </Button>
+                    </li>
+                  </>
+                );
+              })
+            : "loading..."}
         </ul>
       </div>
     </>
