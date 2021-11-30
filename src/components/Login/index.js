@@ -31,6 +31,23 @@ export default function Login() {
   let handlePassWord = (event) => {
     setpassword(event.target.value);
   }
+
+  async function RequestLogin(){
+    let request = {
+      "username":username,
+      "password":password
+    }
+    console.log(request)
+    let res = await axios.post("http://localhost:8888/login",request);
+    console.log(res.data);
+    if(res.data.code == 200){
+      console.log("/user/"+res.data.user_id)
+      let userhomepage = "/user/"+res.data.user_id
+      return userhomepage
+    }
+    return null
+  }
+
   if(userhomepage){
     console.log("go to homepage")
     console.log(userhomepage)
@@ -56,24 +73,8 @@ export default function Login() {
           <Text>Password: </Text>
           <input type="password" name="password" placeholder=" ********" onChange={handlePassWord}/><br/>
           </Flex>
-          <Button><input type="submit" onClick={LoginAction} value="Log In"/></Button>
+          <Button onClick={LoginAction}>Login</Button>
         </Flex>
     </Box>
   )
-}
-
-async function RequestLogin(username,password){
-  let request = {
-    "username":username,
-    "password":password
-  }
-  console.log(request)
-  let res = await axios.post("http://localhost:8888/login",request);
-  console.log(res.data);
-  if(res.data.code == 200){
-    console.log("/user/"+res.data.user_id)
-    let userhomepage = "/user/"+res.data.user_id
-    return userhomepage
-  }
-  return null
 }

@@ -35,6 +35,22 @@ export default function Register() {
   let handleEmail = event => {
     setemail(event.target.value);
   }
+  async function RequestRegister(){
+    let request = {
+      "username":username,
+      "email":email,
+      "password":password
+    }
+    console.log(request)
+    let res = await axios.post("http://localhost:8888/register",request);
+    console.log(res.data);
+    if(res.data.code == 200){
+      console.log("/user/"+res.data.user_id)
+      let userhomepage = "/user/"+res.data.user_id
+      return userhomepage
+    }
+    return null
+  }
   if(userhomepage){
     console.log("go to homepage")
     console.log(userhomepage)
@@ -68,21 +84,4 @@ export default function Register() {
         </Flex>
     </Box>
   )
-}
-
-async function RequestRegister(username,password,email){
-  let request = {
-    "username":username,
-    "email":email,
-    "password":password
-  }
-  console.log(request)
-  let res = await axios.post("http://localhost:8888/register",request);
-  console.log(res.data);
-  if(res.data.code == 200){
-    console.log("/user/"+res.data.user_id)
-    let userhomepage = "/user/"+res.data.user_id
-    return userhomepage
-  }
-  return null
 }
