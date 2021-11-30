@@ -7,6 +7,9 @@ import {
   useLocation,
 } from "react-router-dom";
 import axios from "axios";
+import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { Avatar } from "@chakra-ui/avatar";
 
 axios.defaults.withCredentials = true
 
@@ -21,7 +24,7 @@ export default function Search() {
     });
   }, [key, query]);
   let handleChange = (event) => {
-    setkey(event.target.value);
+    key = event.target.value;
   };
   let handleSubmit = () => {
     console.log(key);
@@ -31,15 +34,24 @@ export default function Search() {
   };
   return (
     <>
-      <div className="Search">
-        <h1>Search Group</h1>
-        <label>Search Group: </label>
-        <input type="text" placeholder="Group Name" onChange={handleChange} />
-        <button onClick={handleSubmit}>Search</button>
-        <div className="Results">
+      <Box className="Search" width="full">
+      <Flex justifyContent="space-between">
+      <Heading>Search Group</Heading>
+      <Box>
+      <Link to={{ pathname: "/"}}>
+          <Button>HomePage</Button>
+      </Link>
+      </Box>
+      </Flex>
+      <Flex justifyContent="space-around" width="500px">
+        <input type="text" placeholder="Group Name" onChange={handleChange}/>
+        <Button onClick={handleSubmit}>Search</Button>
+      </Flex>
+      <Spacer />
+        <Flex justifyContent="space-around" flexDirection="column">
           {loaded ? displayGrps(res) : "loading..."}
-        </div>
-      </div>
+        </Flex>
+      </Box>
     </>
   );
 }
@@ -75,11 +87,17 @@ async function getEvent(key) {
 function displayGrps(data) {
   return data.map((group, index) => {
     return (
+      <Box width="50%">
       <Link key={group.GroupId} to={"/group/" + group.GroupId}>
-        <div key={index} className="Group">
-          <li>Group Name: {group.GroupName}</li>
-        </div>
+        <Flex p={5} shadow="xs" borderWidth="1" justifyContent="space-between" align="center">
+        <Avatar name={group.GroupName} src="https://bit.ly/broken-link" />
+            <Spacer />
+            <Box>
+            <Heading fontSize="xl">{group.GroupName}</Heading>
+            </Box>
+        </Flex>
       </Link>
+      </Box>
     );
   });
 }

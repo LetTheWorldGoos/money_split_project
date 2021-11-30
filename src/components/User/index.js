@@ -9,6 +9,9 @@ import {
 import axios from "axios";
 import "./user.css";
 import Chart from "../Chart"
+import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { Avatar } from "@chakra-ui/avatar";
 
 axios.defaults.withCredentials = true
 export default function User() {
@@ -35,22 +38,26 @@ export default function User() {
   function displayGrps(data, id) {
     return data.map((group, index) => {
       return (
-        <div key={index} className="Group">
+        <Flex p={5} shadow="xs" borderWidth="1" justifyContent="space-between" align="center">
           <Link
             key={group.GroupId}
             to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
           >
-            <li>Group Name: {group.GroupName}</li>
+            <Avatar name={group.GroupName} src="https://bit.ly/broken-link" />
+            <Spacer />
+            <Box>
+            <Heading fontSize="xl">{group.GroupName}</Heading>
+            </Box>
           </Link>
-          <button
+          <Button
             userid={id}
             groupid={group.GroupId}
             ind={index}
             onClick={UserLeave}
           >
             Leave the Group
-          </button>
-        </div>
+          </Button>
+        </Flex>
       );
     });
   }
@@ -92,18 +99,16 @@ export default function User() {
   };
 
   return (
-    <div className="User">
-      <h1 className="header">
+    <Box className="User">
+      <Heading mt="5" fontSize="5xl">
         {loaded ? UserName.toUpperCase() : "loading..."}
-      </h1>
-      <form className="Search Bar">
+      </Heading>
         <label>Search Group: </label>
         <input type="text" placeholder="Group Name" onChange={handleChange} />
         <Link to={{ pathname: "/search", query: key }}>
-          <button>Search</button>
+          <Button>Search</Button>
         </Link>
-      </form>
-      <form className="Search Bar">
+
         <label>Search Event: </label>
         <input
           type="text"
@@ -111,25 +116,24 @@ export default function User() {
           onChange={handleEventSearch}
         />
         <Link to={{ pathname: "/search/event", query: eKey }}>
-          <button>Search</button>
+          <Button>Search</Button>
         </Link>
-      </form>
-      <div className="multicolumn">
-        <div className="Loans column">
-          <h3 className="Title">Loans in Categories</h3>
+        <Grid templateColumns="repeat(3, 1fr)" gap={6} h="full">
+        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Heading textAlign="center" size="lg" p="2">Loans in Categories</Heading>
           {loaded ? displayLons(loans) : "loading..."}
           {loaded? <Chart data={loans}/> : "loading..." }
-        </div>
-        <div className="Activities column">
-          <h3 className="Title">Recent Activities</h3>
-          <ol>{loaded ? displayActs(activities) : "loading..."}</ol>
-        </div>
-        <div className="Groups column">
-          <h3 className="Title">Groups</h3>
+        </Box>
+        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Heading textAlign="center" size="lg" p="2">Recent Activities</Heading>
+          {loaded ? displayActs(activities) : "loading..."}
+        </Box>
+        <Box borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Heading textAlign="center" size="lg" p="2">Groups</Heading>
           {loaded ? displayGrps(groups, id) : "loading..."}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Grid>
+    </Box>
   );
 }
 
@@ -166,12 +170,15 @@ async function getStates(id) {
 function displayActs(data) {
   return data.map((activity, index) => {
     return (
-      <li key={index} className="Activity">
-        <div>Category: {activity.Category}</div>
-        <div>Amount: {activity.Amount}</div>
-        <div>Name: {activity.Name}</div>
-        <div>Date: {activity.Date}</div>
-      </li>
+      <Flex p={5} shadow="xs" borderWidth="1px" justifyContent="space-between">
+        <Box>
+        <Heading fontSize="xl">
+        {activity.Name} 💰{activity.Amount}
+        </Heading>
+        <Box>{activity.Category}</Box>
+        </Box>
+        <Box>{activity.Date}</Box>
+      </Flex>
     );
   });
 }
@@ -179,10 +186,9 @@ function displayActs(data) {
 function displayLons(data) {
   return data.map((loan, index) => {
     return (
-      <div key={index} className="Loan">
-        <li>Category: {loan.Category}</li>
-        <li>Amount: {loan.Amount}</li>
-      </div>
+      <Box p={5} borderWidth="1px">
+        {loan.Category}: {loan.Amount}
+      </Box>
     );
   });
 }
