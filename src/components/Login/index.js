@@ -79,7 +79,9 @@ axios.defaults.withCredentials = true;
                   <Checkbox>Remember me</Checkbox>
                   <Link color={'blue.400'}>Forgot password?</Link>
                 </Stack>
-                <Button onClick={LoginAction}
+                <Button
+                  colorScheme={"green"}
+                  onClick={LoginAction}
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{
