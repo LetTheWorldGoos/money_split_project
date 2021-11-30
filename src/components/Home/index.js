@@ -21,7 +21,6 @@ import {
 import { useHistory } from "react-router";
 
 export default function Home() {
-<<<<<<< Updated upstream
   const history = useHistory();
   return (
     <>
@@ -134,25 +133,6 @@ export default function Home() {
   //   </Flex>
   // </Box>
   // )
-=======
-  return(
-  <Box>
-    <Heading  width="full" height="full" align="center">Splitmunity</Heading>
-    <Flex width="full" height="full" align="center" justifyContent="space-around">
-      <Box>
-      <Link to={{ pathname: "/login"}}>
-          <Button>Sign In</Button>
-        </Link>
-      </Box>
-      <Box>
-      <Link to={{ pathname: "/register"}}>
-          <Button>Sign Up</Button>
-        </Link>
-      </Box>
-    </Flex>
-  </Box>
-  )
->>>>>>> Stashed changes
 }
 
 const Arrow = createIcon({

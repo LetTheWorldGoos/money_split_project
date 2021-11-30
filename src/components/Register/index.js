@@ -24,12 +24,8 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
-<<<<<<< Updated upstream
 axios.defaults.withCredentials = true;
 
-=======
-axios.defaults.withCredentials = true
->>>>>>> Stashed changes
 export default function Register() {
   let [username, setusername] = useState(null);
   let [password, setpassword] = useState(null);
@@ -50,17 +46,12 @@ export default function Register() {
   };
   let handleEmail = (event) => {
     setemail(event.target.value);
-<<<<<<< Updated upstream
-  };
-  async function RequestRegister() {
-=======
   }
   let sleep = function(time){
     setTimeout(()=>{
     },time);
   }
   async function RequestRegister(){
->>>>>>> Stashed changes
     let request = {
       username: username,
       email: email,
@@ -74,70 +65,6 @@ export default function Register() {
       let userhomepage = "/user/" + res.data.user_id;
       return userhomepage;
     }
-<<<<<<< Updated upstream
-    return null;
-  }
-  if (userhomepage) {
-    console.log("go to homepage");
-    console.log(userhomepage);
-    return <Redirect to={userhomepage} />;
-  }
-  return (
-    <Box className="Register">
-      <Flex justifyContent="space-between">
-        <Heading>Splitmunity</Heading>
-        <Box>
-          <Link to={{ pathname: "/" }}>
-            <Button>HomePage</Button>
-          </Link>
-        </Box>
-      </Flex>
-      <Flex
-        width="full"
-        height="400px"
-        align="center"
-        justifyContent="space-around"
-        flexDirection="column"
-      >
-        <Heading>Register</Heading>
-        <Flex>
-          <Text>Username:</Text>
-          <input
-            type="text"
-            name="username"
-            placeholder=" Username"
-            onChange={handleUserName}
-          />
-          <br />
-        </Flex>
-        <Flex>
-          <Text>E-mail:</Text>
-          <input
-            type="email"
-            name="email"
-            placeholder=" example@example.com"
-            onChange={handleEmail}
-          />
-          <br />
-        </Flex>
-        <Flex>
-          <Text>Password: </Text>
-          <input
-            type="password"
-            name="password"
-            placeholder=" ********"
-            onChange={handlePassWord}
-          />
-          <br />
-        </Flex>
-        <Button>
-          <input type="submit" onClick={RegisterAction} value="Register" />
-        </Button>
-      </Flex>
-    </Box>
-  );
-}
-=======
     alert(res.data.status)
     return null
   }
@@ -205,4 +132,3 @@ export default function Register() {
     </Flex>
   );
 }
->>>>>>> Stashed changes
