@@ -121,48 +121,27 @@ export default function Home() {
           </Stack>
         </Stack>
       </Container>
-      <Box p={4}>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
-          <Feature
-            icon={<Icon as={FcMoneyTransfer} w={10} h={10} />}
-            title={"Split money with your friends"}
-            text={
-              "Keep track of you shared bills and who owes who"
-            }
-          />
-          <Feature
-            icon={<Icon as={FcCollaboration} w={10} h={10} />}
-            title={"Create private groups"}
-            text={
-              "Organize and pplit expenses with your groups: friends, family, and housemates"
-            }
-          />
-          <Feature
-            icon={<Icon as={FcCalendar} w={10} h={10} />}
-            title={"Join public activities"}
-            text={"Don't miss any opportunity to have fun and meet cool people"}
-          />
+      <Flex p={4} align="center" justifyContent="space-around">
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={15}>
+          <Box align="center" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white" padding="10px">
+            <Icon as={FcMoneyTransfer} w={20} h={20} marginTop="3px"/>
+            <Heading size="l">Split money with your friends</Heading>
+            Keep track of you shared bills and who owes who
+          </Box>
+          <Box align="center" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white" padding="10px">
+            <Icon as={FcCollaboration} w={20} h={20} />
+            <Heading size="l">Create private groups</Heading>
+Organize and pplit expenses with friends, family, and housemates
+          </Box>
+          <Box align="center" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white" padding="10px">
+          <Icon as={FcCalendar} w={20} h={20}/>
+          <Heading size="l">Join public activities</Heading>
+          Don't miss any opportunity to have fun and meet cool people
+          </Box>
         </SimpleGrid>
-      </Box>
+      </Flex>
     </>
   );
-  // return(
-  // <Box>
-  //   <Heading  width="full" height="full" align="center">Splitmunity</Heading>
-  //   <Flex width="full" height="full" align="center" justifyContent="space-around">
-  //     <Box>
-  //     <Link to={{ pathname: "/login"}}>
-  //         <Button>Log In</Button>
-  //       </Link>
-  //     </Box>
-  //     <Box>
-  //     <Link to={{ pathname: "/register"}}>
-  //         <Button>Register</Button>
-  //       </Link>
-  //     </Box>
-  //   </Flex>
-  // </Box>
-  // )
 }
 
 const Feature = ({ title, text, icon }) => {

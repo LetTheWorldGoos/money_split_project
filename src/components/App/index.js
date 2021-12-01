@@ -18,6 +18,7 @@ import NewActivity from "../Activity/NewActivity";
 import EventSearch from "../Search/event_search";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import NewGroup from "../Group/addNewGroup";
+import JoinGroup from "../Group/joinGroup"
 
 export default class App extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class App extends Component {
               <Route exact path="/login" children={<Login />} />
               <Route exact path="/register" children={<Register />} />
               <Route exact path="/group/new" children={<NewGroup />} />
+              <Route exact path="/group/join" children={<JoinGroup />} />
               <Route exact path="/group/:id" children={<Group />} />
               <Route exact path="/group/:id/add" children={<AddNewBill />} />
               <Route exact path="/user/:id" children={<User />} />
