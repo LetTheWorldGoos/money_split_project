@@ -32,6 +32,7 @@ import {
   Link,
 } from "react-router-dom";
 import { useHistory } from "react-router";
+import HistoryModal from "../HistoryModal"
 
 export default function SimpleSidebar({ children, Name, uid }) {
   const history = useHistory();
@@ -40,14 +41,15 @@ export default function SimpleSidebar({ children, Name, uid }) {
   console.log(uid)
   return (
     <Box minH="90vh" minW="20vw" >
+      <HistoryModal handleClose={onClose} isOpen={isOpen} uid={uid}/>
       <SidebarContent
-        onClose={() => onClose}
         history={history}
         Name={Name}
         uid={uid}
+        OpenModal={onOpen}
         display={{ base: "none", md: "block" }}
       />
-      <Drawer
+      {/* <Drawer
         autoFocus={false}
         isOpen={isOpen}
         placement="left"
@@ -60,30 +62,29 @@ export default function SimpleSidebar({ children, Name, uid }) {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
-      </Box>
+      </Box> */}
     </Box>
   );
 }
 
-const SidebarContent = ({ onClose, history, Name, uid, ...rest }) => {
+const SidebarContent = ({ history, Name, uid, OpenModal, ...rest }) => {
   let grouphandler = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     history.push({
       pathname: `/search`,
     });
   };
   let eventhandler = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     history.push({
       pathname: `/search/event`,
     });
   };
   let joingrouphandler = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     console.log("handle")
     console.log(uid)
     history.push({
@@ -92,12 +93,16 @@ const SidebarContent = ({ onClose, history, Name, uid, ...rest }) => {
     });
   };
   let joineventhandler = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     history.push({
       pathname: `/activity/new`,
     });
   };
-  let historyhandler = () => {};
+  let historyhandler = (event) => {
+    event.preventDefault();
+    console.log("handle")
+    OpenModal();
+  };
   let outhandler = () => {};
 
   const LinkItems = [
@@ -137,7 +142,6 @@ const SidebarContent = ({ onClose, history, Name, uid, ...rest }) => {
             User ID: {uid}
           </Text>
         </Box>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
         <NavItem key={link.name} icon={link.icon} onClick={link.handler}>

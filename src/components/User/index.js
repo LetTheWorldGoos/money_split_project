@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { Avatar } from "@chakra-ui/avatar";
-import SimpleSidebar from "../SimpleSidebar"
+import SimpleSidebar from "../SimpleSidebar";
 import Activity from "../Activity";
 import { useHistory } from "react-router";
 
