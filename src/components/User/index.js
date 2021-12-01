@@ -129,7 +129,7 @@ export default function User() {
 
   return (
     <Flex>
-      <SimpleSidebar Name={UserName}/>
+      <SimpleSidebar Name={UserName} uid={id}/>
     <Box className="User">
       <Flex>
       <Box margin="10px">
@@ -152,22 +152,22 @@ export default function User() {
       </Box>
       </Flex>
         <Grid templateColumns="repeat(3, 1fr)" gap={6} h="full">
-        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box padding="10px" minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Loans in Categories</Heading>
           {loaded ? displayLons(loans) : "loading..."}
           {loaded? <Chart data={loans}/> : "loading..." }
         </Box>
-        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box padding="10px" minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Recent Activities</Heading>
           {loaded ? displayActs(activities) : "loading..."}
         </Box>
         <Grid templateRows="repeat(2, 1fr)" gap={3}>
           <Box
+            padding="10px"
             borderWidth="1px"
             borderRadius="8"
             boxShadow="md"
             bg="white"
-            overflow="scroll"
           >
             <HStack>
               <Heading textAlign="center" size="lg" p="2">
@@ -180,11 +180,11 @@ export default function User() {
             {loaded ? displayGrps(groups, id) : "loading..."}
           </Box>
           <Box
+            padding="10px"
             borderWidth="1px"
             borderRadius="8"
             boxShadow="md"
             bg="white"
-            overflow="scroll"
           >
             <HStack>
               <Heading textAlign="center" size="lg" p="2">

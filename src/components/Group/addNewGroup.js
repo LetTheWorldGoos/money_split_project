@@ -10,6 +10,7 @@ import { getQueriesForElement } from "@testing-library/dom";
 axios.defaults.withCredentials = true;
 function NewGroup(props) {
   const { state } = useLocation();
+  console.log(state);
   const { uid } = state;
   const [groupName, setGroupName] = useState("");
   const [category, setCategory] = useState("");

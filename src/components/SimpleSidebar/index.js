@@ -21,6 +21,7 @@ import {
   FiPlus,
   FiPower,
   FiMenu,
+  FiUserPlus,
 } from "react-icons/fi";
 import {
   BrowserRouter as Router,
@@ -32,16 +33,18 @@ import {
 } from "react-router-dom";
 import { useHistory } from "react-router";
 
-export default function SimpleSidebar({ children, Name }) {
+export default function SimpleSidebar({ children, Name, uid }) {
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(Name);
+  console.log(uid)
   return (
     <Box minH="90vh" minW="20vw" >
       <SidebarContent
         onClose={() => onClose}
         history={history}
         Name={Name}
+        uid={uid}
         display={{ base: "none", md: "block" }}
       />
       <Drawer
@@ -66,27 +69,42 @@ export default function SimpleSidebar({ children, Name }) {
   );
 }
 
-const SidebarContent = ({ onClose, history, Name, ...rest }) => {
-  let grouphandler = () => {
-    console.log("handle");
+const SidebarContent = ({ onClose, history, Name, uid, ...rest }) => {
+  let grouphandler = (event) => {
+    event.preventDefault()
     history.push({
       pathname: `/search`,
     });
   };
-  let eventhandler = () => {
-    console.log("handle");
+  let eventhandler = (event) => {
+    event.preventDefault()
     history.push({
       pathname: `/search/event`,
     });
   };
-  let joinhandler = () => {};
+  let joingrouphandler = (event) => {
+    event.preventDefault()
+    console.log("handle")
+    console.log(uid)
+    history.push({
+      pathname: "/group/new",
+      state: { uid: uid }
+    });
+  };
+  let joineventhandler = (event) => {
+    event.preventDefault()
+    history.push({
+      pathname: `/activity/new`,
+    });
+  };
   let historyhandler = () => {};
   let outhandler = () => {};
 
   const LinkItems = [
     { name: "Group Search", icon: FiUsers, handler: grouphandler },
     { name: "Event Search", icon: FiSlack, handler: eventhandler },
-    { name: "Join or Create", icon: FiPlus, handler: joinhandler },
+    { name: "Join Group", icon: FiPlus, handler: joingrouphandler },
+    { name: "Join Event", icon: FiUserPlus, handler:joineventhandler},
     { name: "History Search", icon: FiSearch, handler: historyhandler },
     { name: "Log Out", icon: FiPower, handler: outhandler },
   ];
@@ -107,13 +125,16 @@ const SidebarContent = ({ onClose, history, Name, ...rest }) => {
         justifyContent="space-between"
         flexDirection="column"
       >
-        <Box margin="20px">
+        <Box marginTop="10px">
           <Heading>Splitmunity</Heading>
         </Box>
         <br />
         <Box>
           <Text fontSize="xl" fontFamily="monospace" fontWeight="bold">
             Login as: {Name}
+          </Text>
+          <Text fontSize="xl" fontFamily="monospace" fontWeight="bold">
+            User ID: {uid}
           </Text>
         </Box>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
