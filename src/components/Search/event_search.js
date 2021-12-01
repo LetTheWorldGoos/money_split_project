@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@chakra-ui/button";
-import { Heading } from "@chakra-ui/layout";
+import { Flex, Heading } from "@chakra-ui/layout";
 
 export default function EventSearch() {
   let { query } = useLocation();
@@ -82,20 +82,39 @@ export default function EventSearch() {
         joinedEvents.some((e) => e === event.EventId)
       ) {
         return (
-          <div key={index} className="Group">
+          <Flex
+            key={index}
+            p={5}
+            shadow="xs"
+            borderWidth="1"
+            justifyContent="space-between"
+            align="center"
+          >
             <li>Event Name: {event.EventName}</li>
-          </div>
+          </Flex>
         );
       }
       return (
-        <div key={index} className="Group">
+        <Flex
+          key={index}
+          p={5}
+          shadow="xs"
+          borderWidth="1"
+          justifyContent="space-between"
+          align="center"
+        >
           <li>
             Event Name: {event.EventName}
-            <Button id={event.EventId} onClick={handleJoin} colorScheme="teal" ml="2">
+            <Button
+              id={event.EventId}
+              onClick={handleJoin}
+              colorScheme="teal"
+              ml="2"
+            >
               Join
             </Button>
           </li>
-        </div>
+        </Flex>
       );
     });
   }
@@ -123,7 +142,9 @@ export default function EventSearch() {
         <Heading>Search Event</Heading>
         <label>Search Event: </label>
         <input type="text" placeholder="Event Name" onChange={handleChange} />
-        <Button onClick={handleSubmit} colorScheme="teal" ml="2">Search</Button>
+        <Button onClick={handleSubmit} colorScheme="teal" ml="2">
+          Search
+        </Button>
         <div className="Results">
           {loaded ? displayEvents(res) : "loading..."}
         </div>

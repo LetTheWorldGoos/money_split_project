@@ -8,13 +8,27 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import "./user.css";
-import Chart from "../Chart"
-import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
+import Chart from "../Chart";
+import {
+  Box,
+  Flex,
+  Grid,
+  Heading,
+  HStack,
+  Spacer,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { Avatar } from "@chakra-ui/avatar";
 import SimpleSidebar from "../SimpleSidebar"
-axios.defaults.withCredentials = true
+import Activity from "../Activity";
+import { useHistory } from "react-router";
+
+axios.defaults.withCredentials = true;
 export default function User() {
+  const history = useHistory();
   let { id } = useParams();
   let [key, setkey] = useState();
   let [eKey, setEKey] = useState("");
@@ -38,7 +52,13 @@ export default function User() {
   function displayGrps(data, id) {
     return data.map((group, index) => {
       return (
-        <Flex p={5} shadow="xs" borderWidth="1" justifyContent="space-between" align="center">
+        <Flex
+          p={5}
+          shadow="xs"
+          borderWidth="1"
+          justifyContent="space-between"
+          align="center"
+        >
           <Link
             key={group.GroupId}
             to={{ pathname: "/group/" + group.GroupId, state: { uid: id } }}
@@ -46,7 +66,7 @@ export default function User() {
             <Avatar name={group.GroupName} src="https://bit.ly/broken-link" />
             <Spacer />
             <Box>
-            <Heading fontSize="xl">{group.GroupName}</Heading>
+              <Heading fontSize="xl">{group.GroupName}</Heading>
             </Box>
           </Link>
           <Button
@@ -99,6 +119,14 @@ export default function User() {
     setEKey(event.target.value);
   };
 
+  const handleNewActivity = (event) => {
+    history.push("/activity/new");
+  };
+
+  const handleNewGroup = (event) => {
+    history.push({ pathname: "/group/new", state: { uid: id } });
+  };
+
   return (
     <Flex>
       <SimpleSidebar Name={UserName}/>
@@ -133,10 +161,42 @@ export default function User() {
         <Heading textAlign="center" size="lg" p="2">Recent Activities</Heading>
           {loaded ? displayActs(activities) : "loading..."}
         </Box>
-        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
-        <Heading textAlign="center" size="lg" p="2">Groups</Heading>
-          {loaded ? displayGrps(groups, id) : "loading..."}
-        </Box>
+        <Grid templateRows="repeat(2, 1fr)" gap={3}>
+          <Box
+            borderWidth="1px"
+            borderRadius="8"
+            boxShadow="md"
+            bg="white"
+            overflow="scroll"
+          >
+            <HStack>
+              <Heading textAlign="center" size="lg" p="2">
+                Groups
+              </Heading>
+              <Button colorScheme="teal" onClick={handleNewGroup}>
+                Add new group
+              </Button>
+            </HStack>
+            {loaded ? displayGrps(groups, id) : "loading..."}
+          </Box>
+          <Box
+            borderWidth="1px"
+            borderRadius="8"
+            boxShadow="md"
+            bg="white"
+            overflow="scroll"
+          >
+            <HStack>
+              <Heading textAlign="center" size="lg" p="2">
+                Activities
+              </Heading>
+              <Button colorScheme="teal" onClick={handleNewActivity}>
+                Add new activity
+              </Button>
+            </HStack>
+            {loaded ? <Activity uid={id} /> : "loading..."}
+          </Box>
+        </Grid>
       </Grid>
     </Box>
     </Flex>
@@ -145,18 +205,22 @@ export default function User() {
 
 async function getStates(id) {
   let info = await axios.get(
-    "http://localhost:8888/get_info?user_id=" + String(id),{withCredentials: true}
+    "http://localhost:8888/get_info?user_id=" + String(id),
+    { withCredentials: true }
   );
   let acts = await axios.get(
-    "http://localhost:8888/user/ra?user_id=" + String(id),{withCredentials: true}
+    "http://localhost:8888/user/ra?user_id=" + String(id),
+    { withCredentials: true }
   );
   let grps = await axios.get(
-    "http://localhost:8888/user/select_group?user_id=" + String(id),{withCredentials: true}
+    "http://localhost:8888/user/select_group?user_id=" + String(id),
+    { withCredentials: true }
   );
   let lons = await axios.get(
-    "http://localhost:8888/user/status_category?user_id=" + String(id),{withCredentials: true}
+    "http://localhost:8888/user/status_category?user_id=" + String(id),
+    { withCredentials: true }
   );
-  console.log(info)
+  console.log(info);
   let UserName = info.data.data.UserName;
   let activities = [];
   let groups = [];
@@ -178,10 +242,10 @@ function displayActs(data) {
     return (
       <Flex p={5} shadow="xs" borderWidth="1px" justifyContent="space-between">
         <Box>
-        <Heading fontSize="xl">
-        {activity.Name} 💰{activity.Amount}
-        </Heading>
-        <Box>{activity.Category}</Box>
+          <Heading fontSize="xl">
+            {activity.Name} 💰{activity.Amount}
+          </Heading>
+          <Box>{activity.Category}</Box>
         </Box>
         <Box>{activity.Date}</Box>
       </Flex>
