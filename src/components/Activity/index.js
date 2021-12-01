@@ -1,10 +1,11 @@
 import { Button } from "@chakra-ui/button";
+import { Box, Flex, Heading, Spacer, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 axios.defaults.withCredentials = true;
-function Activity() {
-  const uid = 1;
+function Activity(props) {
+  const uid = props.uid || 1;
   const [joinedPA, setJoinedPA] = useState(null);
   const [createdPA, setCreatedPA] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -48,44 +49,61 @@ function Activity() {
 
   return (
     <>
-      <h1>User: {uid}</h1>
+      <Heading size="sm">User: {uid}</Heading>
       <div>
-        You have joined:
-        <ul>
-          {joinedPA
-            ? joinedPA.map((pa) => {
-                return (
-                  <>
-                    <li>
-                      {pa.EventName}{" "}
-                      <button id={pa.EventId} onClick={handleLeave}>
-                        Leave
-                      </button>
-                    </li>
-                  </>
-                );
-              })
-            : "loading..."}
-        </ul>
+        <Heading size="sm">You have joined:</Heading>
+        {joinedPA
+          ? joinedPA.map((pa) => {
+              return (
+                <>
+                  <Flex
+                    p={5}
+                    shadow="xs"
+                    borderWidth="1"
+                    justifyContent="space-between"
+                    align="center"
+                  >
+                    <Box>{pa.EventName} </Box>
+                    <Spacer />
+                    <Button
+                      id={pa.EventId}
+                      onClick={handleLeave}
+                      colorScheme="red"
+                    >
+                      Leave
+                    </Button>
+                  </Flex>
+                </>
+              );
+            })
+          : "loading..."}
       </div>
       <div>
-        You have created:
-        <ul>
-          {createdPA
-            ? createdPA.map((pa) => {
-                return (
-                  <>
-                    <li>
-                      {pa.EventName}{" "}
-                      <Button id={pa.EventId} onClick={handleCancel} colorScheme="red">
-                        Cancel
-                      </Button>
-                    </li>
-                  </>
-                );
-              })
-            : "loading..."}
-        </ul>
+        <Heading size="sm">You have created:</Heading>
+        {createdPA
+          ? createdPA.map((pa) => {
+              return (
+                <>
+                  <Flex
+                    p={5}
+                    shadow="xs"
+                    borderWidth="1"
+                    justifyContent="space-between"
+                    align="center"
+                  >
+                    {pa.EventName}{" "}
+                    <Button
+                      id={pa.EventId}
+                      onClick={handleCancel}
+                      colorScheme="red"
+                    >
+                      Cancel
+                    </Button>
+                  </Flex>
+                </>
+              );
+            })
+          : "loading..."}
       </div>
     </>
   );

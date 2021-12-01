@@ -1,5 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input } from "@chakra-ui/input";
+import { Box, Flex, Stack } from "@chakra-ui/layout";
+import { Select } from "@chakra-ui/select";
+import { Button } from "@chakra-ui/button";
 
 function NewActivity() {
   const [eventName, setEventName] = useState("");
@@ -31,100 +36,112 @@ function NewActivity() {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <label for="eventName">Event name:</label>
-        <br />
-        <input
-          type="text"
-          id="eventName"
-          name="eventName"
-          value={eventName}
-          onChange={(e) => {
-            setEventName(e.target.value);
-          }}
-        />
-        <br />
-        <label for="eventType">Event type:</label>
-        <br />
-        <select
-          name="eventType"
-          id="eventType"
-          value={eventType}
-          onChange={(e) => {
-            setEventType(e.target.value);
-          }}
-        >
-          <option value=""></option>
-          <option value="Entertainment">Entertainment</option>
-          <option value="Education">Education</option>
-          <option value="Career">Career</option>
-          <option value="Volunteering">Volunteering</option>
-          <option value="Other">Other</option>
-        </select>
-        <br />
-        <label for="startDate">Start date:</label>
-        <br />
-        <input
-          type="date"
-          id="startDate"
-          name="startDate"
-          value={startDate}
-          onChange={(e) => {
-            setStartDate(e.target.value);
-          }}
-        />
-        <br />
-        <label for="endDate">End date:</label>
-        <br />
-        <input
-          type="date"
-          id="endDate"
-          name="endDate"
-          value={endDate}
-          onChange={(e) => {
-            setEndDate(e.target.value);
-          }}
-        />
-        <br />
-        <label for="fee">Fee:</label>
-        <br />
-        <input
-          type="text"
-          id="fee"
-          name="fee"
-          value={fee}
-          onChange={(e) => {
-            setFee(e.target.value);
-          }}
-        />
-        <br />
-        <label for="location">Location:</label>
-        <br />
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={location}
-          onChange={(e) => {
-            setLocation(e.target.value);
-          }}
-        />
-        <br />
-        <label for="zipcode">Zipcode:</label>
-        <br />
-        <input
-          type="text"
-          id="zipcode"
-          name="zipcode"
-          value={zipcode}
-          onChange={(e) => {
-            setZipcode(e.target.value);
-          }}
-        />
-        <br />
-        <br />
-        <input type="submit" value="Submit"></input>
-      </form>
+      <Flex minH={"70vh"} align={"center"} justify={"center"}>
+        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+          <Box rounded={"lg"} boxShadow={"lg"} p={8}>
+            <form onSubmit={handleSubmit}>
+              <FormControl>
+                <FormLabel for="eventName">Event name:</FormLabel>
+                <Input
+                  type="text"
+                  id="eventName"
+                  name="eventName"
+                  value={eventName}
+                  onChange={(e) => {
+                    setEventName(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel for="eventType">Event type:</FormLabel>
+                <Select
+                  name="eventType"
+                  id="eventType"
+                  value={eventType}
+                  onChange={(e) => {
+                    setEventType(e.target.value);
+                  }}
+                >
+                  <option value=""></option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Education">Education</option>
+                  <option value="Career">Career</option>
+                  <option value="Volunteering">Volunteering</option>
+                  <option value="Other">Other</option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel for="startDate">Start date:</FormLabel>
+
+                <Input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={startDate}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel for="endDate">End date:</FormLabel>
+
+                <Input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel for="fee">Fee:</FormLabel>
+
+                <Input
+                  type="text"
+                  id="fee"
+                  name="fee"
+                  value={fee}
+                  onChange={(e) => {
+                    setFee(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel for="location">Location:</FormLabel>
+
+                <Input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={location}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel for="zipcode">Zipcode:</FormLabel>
+
+                <Input
+                  type="text"
+                  id="zipcode"
+                  name="zipcode"
+                  value={zipcode}
+                  onChange={(e) => {
+                    setZipcode(e.target.value);
+                  }}
+                />
+              </FormControl>
+              <Button type="submit" value="Submit" colorScheme="teal">
+                Submit
+              </Button>
+            </form>
+          </Box>
+        </Stack>
+      </Flex>
     </div>
   );
 }
