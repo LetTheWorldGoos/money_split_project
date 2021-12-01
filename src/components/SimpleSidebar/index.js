@@ -37,7 +37,7 @@ export default function SimpleSidebar({ children, Name }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(Name)
   return (
-    <Box minH="90vh" minW="15vw" >
+    <Box minH="90vh" minW="20vw" >
       <SidebarContent
         onClose={() => onClose}
         history = {history}

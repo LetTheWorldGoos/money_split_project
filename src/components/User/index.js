@@ -124,16 +124,16 @@ export default function User() {
       </Box>
       </Flex>
         <Grid templateColumns="repeat(3, 1fr)" gap={6} h="full">
-        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Loans in Categories</Heading>
           {loaded ? displayLons(loans) : "loading..."}
           {loaded? <Chart data={loans}/> : "loading..." }
         </Box>
-        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Recent Activities</Heading>
           {loaded ? displayActs(activities) : "loading..."}
         </Box>
-        <Box minW="26vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
+        <Box minW="20vw" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white">
         <Heading textAlign="center" size="lg" p="2">Groups</Heading>
           {loaded ? displayGrps(groups, id) : "loading..."}
         </Box>
