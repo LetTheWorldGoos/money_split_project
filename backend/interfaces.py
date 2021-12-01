@@ -78,6 +78,7 @@ def register():
             user_login = User()
             session['username'] = username
             return jsonify({"code": 200,
+                            "status": "success",
                             "username": username,
                             "user_id": int(user_login.get_id(username))
                             })
@@ -105,7 +106,7 @@ def login():
             # print(session)
             return jsonify(
                 {"code": 200,
-
+                 "status": "success",
                  # "login": 1,
                  "username": user_login.username,
                  "user_id": int(user_login.get_id(username))})
@@ -126,7 +127,8 @@ def logout():
     # remove the username from the session if it's there
     if session.get('username'):
         session.clear()
-        return jsonify({"code": 200
+        return jsonify({"code": 200,
+                        "status": "success"
                         })
     else:
         return jsonify({"code": 500,
@@ -147,6 +149,7 @@ def get_info():
         if len(list_rsl) >= 1:
             ans = {
                 "code": 200,
+                "status": "success",
                 "data": list_rsl[0]
             }
             return jsonify(ans)
@@ -177,7 +180,8 @@ def group_add_transaction():
         rsl = init_conn.ddl_db_uid(db_conn, insert_sql)
         if rsl:
             return jsonify({
-                "code": 200
+                "code": 200,
+                "status": "success"
             })
         else:
             return jsonify({"code": 500,
@@ -199,7 +203,8 @@ def group_settle():
         rsl = init_conn.ddl_db_uid(db_conn, update_sql)
         if rsl:
             return jsonify({
-                "code": 200
+                "code": 200,
+                "status": "success"
             })
         else:
             return jsonify({"code": 500,
@@ -223,6 +228,7 @@ def group_get_records():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -255,6 +261,7 @@ def group_get_loans():
         list_rsl = check_bill(results1, results2, title='UserName')
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -276,6 +283,7 @@ def group_get_members():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -301,6 +309,7 @@ def get_user_search():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -325,7 +334,8 @@ def get_user_delete():
             delete_process = f'DELETE FROM GroupJoin WHERE UserId = {user_id} AND GroupId = {group_id}'
             rsl = init_conn.ddl_db_uid(db_conn, delete_process)
             if rsl:
-                return jsonify({"code": 200
+                return jsonify({"code": 200,
+                                "status": "success"
                                 })
             else:
                 return jsonify({"code": 500,
@@ -350,6 +360,7 @@ def get_user_select_group():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -378,6 +389,7 @@ def get_user_ra():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -407,6 +419,7 @@ def user_status_category():
         list_rsl = check_bill(results1, results2, title='Category')
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -426,6 +439,7 @@ def search_event_join():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -445,6 +459,7 @@ def search_event_create():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -480,6 +495,7 @@ def create_group():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -506,7 +522,8 @@ def join_group():
             try:
                 init_conn.ddl_db_uid(db_conn, insert_group)
                 ans = {
-                    "code": 200
+                    "code": 200,
+                    "status": "success"
                 }
             except Exception as e:
                 ans = {
@@ -568,7 +585,8 @@ def create_event():
         rsl2 = init_conn.ddl_db_uid(db_conn, insert_event)
         if rsl1 and rsl2:
             return jsonify({
-                "code": 200
+                "code": 200,
+                "status": "success"
             })
         else:
             return jsonify({"code": 500,
@@ -593,10 +611,11 @@ def join_event():
         try:
             rsl1 = init_conn.ddl_db_uid(db_conn, insert_act)
             return jsonify({
-                "code": 200
+                "code": 200,
+                "status": "success"
             })
         except Exception as e:
-            print(rsl1)
+            # print(rsl1)
             print(e)
             return jsonify({"code": 500,
                             "status": "join failed."})
@@ -660,7 +679,8 @@ def delete_create_event():
             # response
             if rsl:
                 return jsonify({
-                    "code": 200
+                    "code": 200,
+                    "status": "success"
                 })
 
         return jsonify({"code": 500,
@@ -685,7 +705,8 @@ def delete_join_event():
         # response
         if rsl:
             return jsonify({
-                "code": 200
+                "code": 200,
+                "status": "success"
             })
         else:
             return jsonify({"code": 500,
@@ -707,6 +728,7 @@ def search_event_all():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status": "success",
             "data": list_rsl
         }
         return jsonify(ans)
@@ -728,6 +750,7 @@ def get_tr_info_yr():
         list_rsl = cur_to_dict(cols, results)
         ans = {
             "code": 200,
+            "status":"success",
             "data": list_rsl
         }
         return jsonify(ans)
