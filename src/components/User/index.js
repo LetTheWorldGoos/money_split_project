@@ -120,7 +120,7 @@ export default function User() {
   };
 
   const handleNewActivity = (event) => {
-    history.push("/activity/new");
+    history.push({ pathname: "/activity/new", state: { uid: id } } );
   };
 
   const handleNewGroup = (event) => {
@@ -146,7 +146,7 @@ export default function User() {
           placeholder="Event Name"
           onChange={handleEventSearch}
         />
-        <Link to={{ pathname: "/search/event", query: eKey }}>
+        <Link to={{ pathname: "/search/event", query: eKey, state:{uid:id} }}>
           <Button colorScheme="teal">Search</Button>
         </Link>
       </Box>

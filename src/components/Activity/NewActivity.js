@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useLocation, useParams } from "react-router";
 import axios from "axios";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Flex, Stack } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
 import { Button } from "@chakra-ui/button";
+axios.defaults.withCredentials = true;
 
 function NewActivity() {
   const [eventName, setEventName] = useState("");
@@ -14,7 +16,8 @@ function NewActivity() {
   const [fee, setFee] = useState(0);
   const [location, setLocation] = useState("");
   const [zipcode, setZipcode] = useState("");
-  const uid = 1;
+  const { state } = useLocation();
+  const { uid } = state;
 
   const handleSelect = (current_select) => {
     setEventType(current_select.value);
@@ -23,7 +26,7 @@ function NewActivity() {
   const handleSubmit = (event) => {
     event.preventDefault();
     alert("submit?");
-    axios.post("http://127.0.0.1:8888/pa/create", {
+    axios.post("http://localhost:8888/pa/create", {
       event_name: eventName,
       event_type: eventType,
       start_date: startDate,

@@ -131,7 +131,7 @@ export default function Home() {
           <Box align="center" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white" padding="10px">
             <Icon as={FcCollaboration} w={20} h={20} />
             <Heading size="l">Create private groups</Heading>
-Organize and pplit expenses with friends, family, and housemates
+Organize and split expenses with friends, family, and housemates
           </Box>
           <Box align="center" borderWidth="1px" borderRadius="8"  boxShadow="md" bg="white" padding="10px">
           <Icon as={FcCalendar} w={20} h={20}/>

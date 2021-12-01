@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@chakra-ui/button";
 import { Flex, Heading } from "@chakra-ui/layout";
+axios.defaults.withCredentials = true;
 
 export default function EventSearch() {
   let { query } = useLocation();
   let [key, setkey] = useState(null);
   console.log(key);
-  const uid = 1001;
+  const { state } = useLocation();
+  const { uid } = state;
   let [{ res, loaded }, setRes] = useState(0, false);
   let [joinedEvents, setJoinedEvents] = useState([]);
   let [createdEvents, setCreatedEvents] = useState([]);
@@ -120,6 +122,7 @@ export default function EventSearch() {
   }
 
   const handleJoin = (e) => {
+    console.log(uid)
     axios
       .post(urlPrefix + "/pa/join", {
         user_id: uid,
