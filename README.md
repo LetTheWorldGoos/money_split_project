@@ -1,6 +1,6 @@
 # money_split_project
 money split website for CS411 course.
-including front end with React, back end with Flask.
+including front end with React(see master branch), back end with Flask(see main branch).
 
 ### How to start the backend service
 
